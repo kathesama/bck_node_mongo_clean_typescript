@@ -18,7 +18,7 @@ d. $ npx husky add .husky/pre-commit 'npx lint-staged'<br>
 e. Abrir VSCode y crear el archivo **.lintstagedrc.json** en la raíz, agregar el siguiente contenido:
 ```
 {
-  "*.ts": [
+  "*.js": [
     "eslint 'src/**'"
   ]
 }
