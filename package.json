@@ -4,6 +4,7 @@
   "description": "Backend para el sistema de monitorizacion de granja",
   "main": "index.js",
   "scripts": {
+    "start": "npm run ./src/main/server/server.js",
     "test": "jest --passWithNoTests --silent --noStackTrace",
     "test:all": "jest",
     "test:watch": "jest -i --watch",
