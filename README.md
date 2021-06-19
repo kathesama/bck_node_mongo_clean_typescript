@@ -1,3 +1,18 @@
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.2/css/all.css" integrity="sha384-vSIIfh2YWi9wW0r9iZe7RJPrKwp6bG+s9QZMoITbCckVJqGCCRhc+ccxNcdpHuYu" crossorigin="anonymous">
+
+[<img src="https://img.shields.io/badge/Linkedin-kathesama-blue?style=for-the-badge&logo=linkedin">](https://www.linkedin.com/in/kathesama)
+![MongoDB](https://img.shields.io/badge/-MongoDB-009900?logo=mongodb&logoColor=white&style=for-the-badge)
+<br>
+[![GitHub issues](https://img.shields.io/github/issues/kathesama/bck_node_mongo_clean?style=plastic)](https://github.com/kathesama/bck_node_mongo_clean/issues)
+[![GitHub forks](https://img.shields.io/github/forks/kathesama/bck_node_mongo_clean?style=plastic)](https://github.com/kathesama/bck_node_mongo_clean/network)
+[![GitHub stars](https://img.shields.io/github/stars/kathesama/bck_node_mongo_clean?style=plastic)](https://github.com/kathesama/bck_node_mongo_clean/stargazers)
+![GitHub last commit](https://img.shields.io/github/last-commit/kathesama/bck_node_mongo_clean?color=red&style=plastic)
+![GitHub top language](https://img.shields.io/github/languages/top/kathesama/bck_node_mongo_clean?style=plastic)
+<br>
+[![GitHub license](https://img.shields.io/github/license/kathesama/bck_node_mongo_clean?style=plastic)](https://github.com/kathesama/bck_node_mongo_clean/blob/main/LICENSE)
+![GitHub repo size](https://img.shields.io/github/repo-size/kathesama/bck_node_mongo_clean?style=plastic)
+<br>
+
 # bck_node_mongo_clean
 Backend for Farm proyect
 
@@ -38,6 +53,9 @@ g. Para tener un patron de desarrollo en git<br>
 ```
 npm i -D git-commit-msg-linter
 ```
+
+
+![commiMessageLinter](assets/msgLinter.PNG)
 
 Para que funcione con las nuevas versiones de husky, ejecutar por consola:
 >$ npx husky add .husky/commit-msg ".git/hooks/commit-msg \$1"

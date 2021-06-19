@@ -1,7 +1,8 @@
-import InvalidArgument from '../errors/InvalidArgument.js';
-import URlLogin from './protocolHttp.js';
+import { InvalidArgument } from "../errors/InvalidArgument";
+import { URlLogin } from "./protocolHttp";
 
 describe('Protocols and Query', () => {
+
   it('Login valid URL', () => {
     const parsedURL = URlLogin.parseURL('http://localhost:3000/login');
 
@@ -11,13 +12,12 @@ describe('Protocols and Query', () => {
 
   it('Login response query', () => {
     const expectedAuth = {
-      user: 'user',
-      password: 'password',
+      'user': 'user',
+      'password': 'password'
     };
 
-    const parsedURL = URlLogin.parseURL(
-      `http://localhost:3000/login?user=${expectedAuth.user}&password=${expectedAuth.password}`
-    );
+    const parsedURL = URlLogin.parseURL(`http://localhost:3000/login?user=${expectedAuth['user']}&password=${expectedAuth['password']}`);
+
 
     // Object.fromEntries convierte un map object en un objeto JS
     const parsedURLQuery = Object.fromEntries(new URLSearchParams(parsedURL.search));
@@ -26,7 +26,7 @@ describe('Protocols and Query', () => {
   });
 
   it('User invalid URL', () => {
-    const expectError = () => {
+    const expectError = (): void =>{
       URlLogin.parseURL('');
     };
 

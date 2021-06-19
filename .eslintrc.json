@@ -1,41 +1,26 @@
 {
-  "env": {
-    "node": true,
-    "jest": true,
-    "es6": true
-  },
-  "extends": ["airbnb-base", "plugin:jest/recommended", "plugin:security/recommended", "plugin:prettier/recommended"],
-  "plugins": ["jest", "security", "prettier"],
-  "parser": "@babel/eslint-parser",
+  "extends": ["plugin:@typescript-eslint/recommended"],
   "parserOptions": {
-    "ecmaVersion": 2018,
-    "sourceType": "module",
-    "allowImportExportEverywhere": false,
-    "ecmaFeatures": {
-      "globalReturn": false,
-      "jsx": true,
-      "experimentalObjectRestSpread": true
-    },
-    "requireConfigFile": false
+    "project": "./tsconfig.json",
+    "ecmaVersion": 2019,
+    "sourceType": "module"
   },
+  "plugins": ["jest"],
+  "parser": "@typescript-eslint/parser",
   "rules": {
     "no-console": "error",
     "func-names": "off",
     "no-underscore-dangle": "off",
     "consistent-return": "off",
     "jest/expect-expect": "off",
-    "security/detect-object-injection": "off",
-    "import/extensions": [
-      "error",
-      "ignorePackages",
-      {
-        "js": "always",
-        "jsx": "never",
-        "ts": "never",
-        "tsx": "never",
-        "md": "never"
-      }
-    ],
-    "prettier/prettier": ["error", { "endOfLine": "auto"}, { "usePrettierrc": true }]
-  }
+    "@typescript-eslint/no-redeclare": "off",
+    "@typescript-eslint/semi": [2, "always"],
+    "@typescript-eslint/strict-boolean-expresions": "off",
+    "@typescript-eslint/consistent-type-definitions": "off",
+    "@typescript-eslint/comma-spacing": "error",
+    "@typescript-eslint/return-await": "error",
+    "@typescript-eslint/no-explicit-any": "off",
+    "import/prefer-default-export": "off"
+  },
+  "ignorePatterns": ["*.md"]
 }
