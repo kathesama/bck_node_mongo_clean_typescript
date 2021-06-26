@@ -15,5 +15,9 @@
   "javascript.updateImportsOnFileMove.enabled": "always",
   "settingsSync.ignoredExtensions": [
       "ms-vscode.azurecli"
-  ]
+  ],
+  "workbench.colorCustomizations": {
+    "tab.activeBorder": "#ff0080",
+    "tab.unfocusedActiveBorder": "#000000"
+  }
 }

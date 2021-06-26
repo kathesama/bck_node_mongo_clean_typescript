@@ -123,5 +123,3 @@ export const environment = ():any => {
     googleConfig,
   };
 };
-
-// export { environment };
