@@ -98,4 +98,10 @@ Comandos útiles de Git.
 * Ver que archivos han cambiado: git status
 * Ver cuales son tus commits pendientes por subir: git log
 
+Generar certificados TLS, pasos:
+
+1. openssl genrsa -out server-key.pem 2048
+2. openssl req -new -sha256 -key server-key.pem -out server-csr.pem
+3. openssl x509 -req -days 3650 -in server-csr.pem -signkey server-key.pem -out server-cert.pem
+
 

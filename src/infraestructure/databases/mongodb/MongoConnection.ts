@@ -1,14 +1,14 @@
 import mongoose from 'mongoose';
 import fs from 'fs';
 
-import { logger, environment } from '../../../main/config/';
+import { logger, environmentConfig } from '../../../main/config/';
 
 export default ():void => {
   try {
-    const sslCA = environment().mongooseConfig.IS_TLS === true ? [fs.readFileSync(environment().mongooseConfig.CA_CERT, 'utf-8')] : [];
-    const sslPass = environment().mongooseConfig.IS_TLS === true ? environment().mongooseConfig.CA_TOKEN : '';
-    const sslKey = environment().mongooseConfig.IS_TLS === true ? fs.readFileSync(environment().mongooseConfig.KEY_CERT, 'utf-8') : '';
-    const sslCert = environment().mongooseConfig.IS_TLS === true ? fs.readFileSync(environment().mongooseConfig.PEM_CERT, 'utf-8') : '';
+    const sslCA = environmentConfig().mongooseConfig.IS_TLS === true ? [fs.readFileSync(environmentConfig().mongooseConfig.CA_CERT, 'utf-8')] : [];
+    const sslPass = environmentConfig().mongooseConfig.IS_TLS === true ? environmentConfig().mongooseConfig.CA_TOKEN : '';
+    const sslKey = environmentConfig().mongooseConfig.IS_TLS === true ? fs.readFileSync(environmentConfig().mongooseConfig.KEY_CERT, 'utf-8') : '';
+    const sslCert = environmentConfig().mongooseConfig.IS_TLS === true ? fs.readFileSync(environmentConfig().mongooseConfig.PEM_CERT, 'utf-8') : '';
 
     const options = {
       sslCA,
@@ -16,11 +16,11 @@ export default ():void => {
       sslKey,
       sslCert,
       ssl: true,
-      ...environment().mongooseConfig.options,
-      dbName: environment().mongooseConfig.DB_NAME
+      ...environmentConfig().mongooseConfig.options,
+      dbName: environmentConfig().mongooseConfig.DB_NAME
     };
 
-    mongoose.connect(environment().mongooseConfig.URL, { ...options }, (err) => {
+    mongoose.connect(environmentConfig().mongooseConfig.URL, { ...options }, (err) => {
       if (err) {
         logger.error(err.message);
       }else{

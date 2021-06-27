@@ -3,15 +3,18 @@ import { HttpRequest, HttpResponse} from '../../interfaces/http.interface';
 import { ControllerInterface } from "../../interfaces/controller.interface";
 
 // desacoplamos express del proyecto para usarlo en los routes
-export const AdapterRoute = ( controler: ControllerInterface ) => {
+export const AdapterRoute = ( controller: ControllerInterface ) => {
 
-  return async (req: Request, res: Response): Promise<any> => {
+  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+  return async (req: Request, res: Response) => {
+
     const httpRequest: HttpRequest = {
       body: req.body,
-      params: req.params
+      params: req.params,
+      headers: req.headers
     };
 
-    const httpResponse: HttpResponse = await controler.handle(httpRequest);
+    const httpResponse: HttpResponse = await controller.handle(httpRequest);
 
     res.status(httpResponse.statusCode).json(httpResponse.body);
   };

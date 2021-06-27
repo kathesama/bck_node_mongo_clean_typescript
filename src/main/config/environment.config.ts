@@ -1,10 +1,11 @@
 // Reveal pattern
 import dotenv from 'dotenv';
 import Joi from 'joi';
+
 import { ServerError } from '../../errors/';
 
 dotenv.config();
-export const environment = ():any => {
+export const environmentConfig = ():any => {
 
   const envVarsSchema = Joi.object()
     .keys({
@@ -51,6 +52,7 @@ export const environment = ():any => {
       IS_TLS_MONGO: Joi.boolean().default(false).description('Should I Use TLS for mongo?'),
       GOOGLE_CLIENT_ID: Joi.string().description('Cliend ID for google Auth API '),
       GOOGLE_SECRET_ID: Joi.string().description('The key for access Google API Service'),
+      HOST_ENABLED: Joi.string().description('Whitelisted hosts'),
       npm_package_version: Joi.string().default('').description('Version from package.json'),
     })
     .unknown();
@@ -72,6 +74,7 @@ export const environment = ():any => {
     URL: envVars.isHTTPS ? envVars.SECURE_SERVER_URL : envVars.SERVER_URL,
     KEY_PEM: envVars.isHTTPS ? envVars.KEY_PEM_HTTPS : '',
     CERT_PEM: envVars.isHTTPS ? envVars.CERT_PEM_HTTPS : '',
+    HOST_ENABLED: envVars.HOST_ENABLED,
   };
 
   const emailConfig = {

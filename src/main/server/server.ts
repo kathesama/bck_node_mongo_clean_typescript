@@ -1,9 +1,28 @@
-import app  from '../config/app';
-import { environment, logger } from '../config/';
-import ConnectDB from '../../infraestructure/databases/mongodb/MongoConnection';
+import { App } from '../config/app';
+import { logger } from '../config/';
 
-app.listen(environment().serverConfig.PORT, () => {
-  logger.info(`Server up at port: \x1b[32m%s\x1b[0m`, `${environment().serverConfig.PORT}`);
+const app = new App();
 
-  ConnectDB();
+app.start();
+
+const exitHandler = () => {
+  if (app) {
+    app.close();
+  }
+};
+
+const unexpectedErrorHandler = (error) => {
+  logger.error(error);
+  exitHandler();
+};
+
+process.on('uncaughtException', unexpectedErrorHandler);
+process.on('unhandledRejection', unexpectedErrorHandler);
+
+process.on('SIGTERM', () => {
+  logger.info('SIGTERM received');
+  exitHandler();
+  if (app) {
+    app.close();
+  }
 });

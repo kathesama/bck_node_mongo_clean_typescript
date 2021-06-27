@@ -105,3 +105,6 @@ dist
 /certs/client.key
 /certs/client.pem
 /certs/server_root_CA.crt
+/certs/https/server-cert.pem
+/certs/https/server-csr.pem
+/certs/https/server-key.pem

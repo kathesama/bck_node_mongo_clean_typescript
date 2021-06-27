@@ -2,8 +2,10 @@ import TestRepository from "../repositories/test.repository";
 
 class TestService {
 
-  async get():Promise<any> {
-    return TestRepository.find({});
+  async getOne():Promise<any> {
+    const one: any = TestRepository.findOne();
+    // console.log("one: ",  one);
+    return one;
   }
 }
 

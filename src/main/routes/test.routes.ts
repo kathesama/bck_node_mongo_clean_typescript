@@ -3,11 +3,11 @@ import { AdapterRoute } from '../adapters/express.adapter';
 import { makeTestFactorie } from '../factories/test.factorie';
 
 export default (router: Router): void => {
-  // router.get('/test', (req, res) => {
+  // router.get('/prueba', (req, res) => {
   //   res.status(200).json({
   //     ok: true,
   //     body: 'server is ready'
   //   });
   // });
-  router.get('/test', AdapterRoute(makeTestFactorie));
+  router.get('/prueba', AdapterRoute(makeTestFactorie()));
 };

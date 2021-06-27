@@ -1,12 +1,9 @@
-import mongoose from 'mongoose';
+import { getTestModelInterface } from "../useCaseDTO/getTest.interfaces";
 
-const testSchema = new mongoose.Schema({
-  content: { type: String }
-});
+export class TestModel implements getTestModelInterface{
 
-export default testSchema;
-
-export class TestModel {
-  content: string;
+  get content(): string{
+    return this.content;
+  }
 }
 
