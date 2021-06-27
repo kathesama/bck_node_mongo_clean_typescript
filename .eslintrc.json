@@ -22,10 +22,5 @@
     "@typescript-eslint/no-explicit-any": "off",
     "import/prefer-default-export": "off"
   },
-  "overrides": [
-    {
-      "files": ["*.ts", "*.tsx"]
-    }
-  ],
   "ignorePatterns": ["*.md"]
 }
