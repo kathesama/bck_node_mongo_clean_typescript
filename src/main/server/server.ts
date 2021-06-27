@@ -1,4 +1,4 @@
-import { App } from '../config/app';
+import App from '../config/app';
 import { logger } from '../config/';
 
 const app = new App();

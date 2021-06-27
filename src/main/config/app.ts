@@ -10,7 +10,7 @@ import { environmentConfig } from './environment.config';
 import ConnectDB from '../../infraestructure/databases/mongodb/MongoConnection';
 
 class App {
-  private app: any = null;
+  public app: any = null;
   private server: any = null;
 
   constructor(){
@@ -74,4 +74,4 @@ class App {
   }
 }
 
-export { App };
+export default App;
