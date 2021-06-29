@@ -1,13 +1,13 @@
 import Ddos from 'ddos';
-import { logger, environmentConfig } from "../config";
+import { logger, environmentConfig } from '../config';
 
-const onDenial = function (req) {
+const onDenial = (req) => {
   logger.warning('DDOS from ', req);
 };
 
 export const ddos = new Ddos({
-  burst:10,
-  limit:15,
+  burst: 3,
+  limit: 4,
   whitelist: environmentConfig().serverConfig.HOST_ENABLED,
-  onDenial
+  onDenial,
 });

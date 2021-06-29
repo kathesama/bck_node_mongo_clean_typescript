@@ -4,7 +4,7 @@ import { environmentConfig } from '../config';
 const userAgent: any = Fingerprint;
 
 const params: any = {
-  parameters:[
+  parameters: [
     // Defaults
     userAgent.useragent,
     userAgent.acceptHeaders,

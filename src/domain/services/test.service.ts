@@ -1,10 +1,8 @@
-import TestRepository from "../repositories/test.repository";
+import TestRepository from '../repositories/test.repository';
 
 class TestService {
-
-  async getOne():Promise<any> {
+  async getOne(): Promise<any> {
     const one: any = TestRepository.findOne();
-    // console.log("one: ",  one);
     return one;
   }
 }

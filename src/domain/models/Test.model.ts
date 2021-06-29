@@ -1,9 +1,7 @@
-import { getTestModelInterface } from "../useCaseDTO/getTest.interfaces";
+import { getTestModelInterface } from '../useCaseDTO/getTest.interfaces';
 
-export class TestModel implements getTestModelInterface{
-
-  get content(): string{
+export class TestModel implements getTestModelInterface {
+  get content(): string {
     return this.content;
   }
 }
-

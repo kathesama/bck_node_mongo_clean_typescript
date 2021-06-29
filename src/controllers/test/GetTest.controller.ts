@@ -1,11 +1,10 @@
-import { ControllerInterface } from "../../interfaces/controller.interface";
-import { GetTestInterface } from "../../domain/useCaseDTO/getTest.interfaces";
+import { ControllerInterface } from '../../interfaces/controller.interface';
+import { GetTestInterface } from '../../domain/useCaseDTO/getTest.interfaces';
 import { serverErrorHelper, successHelper } from '../../helpers/http.helper';
 import { HttpResponse } from '../../interfaces/http.interface';
 
 export class GetTest implements ControllerInterface {
-
-  constructor(private readonly getTest : GetTestInterface){
+  constructor(private readonly getTest: GetTestInterface) {
     this.getTest = getTest;
   }
 

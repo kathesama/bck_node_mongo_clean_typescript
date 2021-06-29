@@ -5,34 +5,20 @@ import Joi from 'joi';
 import { ServerError } from '../../errors/';
 
 dotenv.config();
-export const environmentConfig = ():any => {
-
+export const environmentConfig = (): any => {
   const envVarsSchema = Joi.object()
     .keys({
-      NODE_ENV: Joi.string()
-        .default('development')
-        .valid('production', 'development', 'test')
-        .required(),
-      APP_PATH: Joi.string()
-        .default('')
-        .description('Base app path'),
+      NODE_ENV: Joi.string().default('development').valid('production', 'development', 'test').required(),
+      APP_PATH: Joi.string().default('').description('Base app path'),
       SERVER_FINGERKEY: Joi.string().description('Server Random Key '),
       SERVER_URL: Joi.string().description('Public url path'),
       SECURE_SERVER_URL: Joi.string().description('Secure url path'),
       PORT: Joi.number().default(8080),
       isHTTPS: Joi.boolean().default(false),
       SECURE_PORT: Joi.number().default(443),
-      MONGO_URL: Joi.string()
-        .default('')
-        .description('Mongo DB url')
-        .required(),
-      DB_NAME: Joi.string()
-        .default(`prueba`)
-        .description('Mongo DB name'),
-      JWT_SECRET: Joi.string()
-        .default('')
-        .description('JWT secret key')
-        .required(),
+      MONGO_URL: Joi.string().default('').description('Mongo DB url').required(),
+      DB_NAME: Joi.string().default(`prueba`).description('Mongo DB name'),
+      JWT_SECRET: Joi.string().default('').description('JWT secret key').required(),
       JWT_ACCESS_EXPIRATION_MINUTES: Joi.string().default('30m').description('minutes after which access tokens expire'),
       JWT_REFRESH_EXPIRATION_DAYS: Joi.string().default('d').description('days after which refresh tokens expire'),
       JWT_RESET_PASSWORD_EXPIRATION_MINUTES: Joi.string()
@@ -52,8 +38,10 @@ export const environmentConfig = ():any => {
       IS_TLS_MONGO: Joi.boolean().default(false).description('Should I Use TLS for mongo?'),
       GOOGLE_CLIENT_ID: Joi.string().description('Cliend ID for google Auth API '),
       GOOGLE_SECRET_ID: Joi.string().description('The key for access Google API Service'),
-      HOST_ENABLED: Joi.string().description('Whitelisted hosts'),
       npm_package_version: Joi.string().default('').description('Version from package.json'),
+      HOST_ENABLED: Joi.string().description('Whitelisted hosts'),
+      HOST_TIME_WINDOWD: Joi.string().description('Time enabled for make a certain petitions quantity'),
+      HOST_MAX_PETITIONS: Joi.string().description('Max quantity petitions for a window time'),
     })
     .unknown();
 
@@ -75,6 +63,8 @@ export const environmentConfig = ():any => {
     KEY_PEM: envVars.isHTTPS ? envVars.KEY_PEM_HTTPS : '',
     CERT_PEM: envVars.isHTTPS ? envVars.CERT_PEM_HTTPS : '',
     HOST_ENABLED: envVars.HOST_ENABLED,
+    HOST_TIME_WINDOWD: envVars.HOST_TIME_WINDOWD,
+    HOST_MAX_PETITIONS: envVars.HOST_MAX_PETITIONS,
   };
 
   const emailConfig = {
