@@ -10,6 +10,7 @@ export default {
     '!<rootDir>/src/main/config/*.ts',
     '!<rootDir>/src/main/routes/*.ts',
     '!<rootDir>/src/main/middlewares/ddos.middleware.ts',
+    '!<rootDir>/src/main/adapters/express.adapter.ts',
     '!<rootDir>/src/main/middlewares/index.ts',
   ],
   collectCoverage: true,
