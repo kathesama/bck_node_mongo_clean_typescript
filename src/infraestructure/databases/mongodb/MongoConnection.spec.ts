@@ -26,6 +26,7 @@ describe('connectDatabase', () => {
       dbModule.callback
     );
 
+    // eslint-disable-next-line quotes
     expect(consoleLogSpyOn).toBeCalledWith(`Conectado a DB en el puerto: 27017 -> \x1b[32m%s\x1b[0m`, `online`);
     consoleLogSpyOn.mockRestore();
   });
@@ -51,7 +52,7 @@ describe('connectDatabase', () => {
       dbModule.callback
     );
 
-    expect(consoleLogSpyOn).toBeCalledWith(`connect error`);
+    expect(consoleLogSpyOn).toBeCalledWith('connect error');
     consoleLogSpyOn.mockRestore();
   });
 });

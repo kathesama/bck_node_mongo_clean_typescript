@@ -8,6 +8,7 @@ describe('Middlewares', () => {
       res.send({ statusCode: 200, body: 'something' });
     });
 
+    // eslint-disable-next-line quotes
     const contentSecurityPolicy = `default-src 'self';base-uri 'self';block-all-mixed-content;font-src 'self' https: data:;frame-ancestors 'self';img-src 'self' data:;object-src 'none';script-src 'self';script-src-attr 'none';style-src 'self' https: 'unsafe-inline';upgrade-insecure-requests`;
 
     await request(application.app)

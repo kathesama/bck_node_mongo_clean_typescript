@@ -6,8 +6,8 @@ import routes from './config.routes';
 import { logger } from './logger.config';
 import { ServerError } from '../../errors';
 import configMiddlewares from './middlewares.config';
-import { environmentConfig } from './environment.config';
-import { connectDatabase, dbOptions } from '../../infraestructure/databases/mongodb/MongoConnection';
+import { environmentConfig, mongoDbOptions } from './environment.config';
+import { connectDatabase } from '../../infraestructure/databases/mongodb/MongoConnection';
 
 class App {
   public app: any = null;
@@ -40,6 +40,7 @@ class App {
       };
 
       this.server = https.createServer(httpsServerOptions, this.app).listen(environmentConfig().serverConfig.PORT, () => {
+        // eslint-disable-next-line quotes
         logger.info(`Server up at port: \x1b[32m%s\x1b[0m`, `${environmentConfig().serverConfig.PORT}`);
       });
     } catch (error) {
@@ -50,6 +51,7 @@ class App {
   private startNoTLS(): void {
     try {
       this.app.listen(environmentConfig().serverConfig.PORT, () => {
+        // eslint-disable-next-line quotes
         logger.info(`Server up at port: \x1b[32m%s\x1b[0m`, `${environmentConfig().serverConfig.PORT}`);
       });
     } catch (error) {
@@ -61,7 +63,7 @@ class App {
     try {
       environmentConfig().serverConfig.isHTTPS ? this.startTLS() : this.startNoTLS();
 
-      connectDatabase(environmentConfig().mongooseConfig.URL, dbOptions());
+      connectDatabase(environmentConfig().mongooseConfig.URL, mongoDbOptions());
     } catch (error) {
       throw new ServerError(`${error.message}`);
     }
