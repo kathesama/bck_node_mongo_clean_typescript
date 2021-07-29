@@ -6,8 +6,9 @@ import routes from './config.routes';
 import { logger } from './logger.config';
 import { ServerError } from '../../errors';
 import configMiddlewares from './middlewares.config';
-import { environmentConfig, mongoDbOptions } from './environment.config';
+import { environmentConfig } from './environment.config';
 import { connectDatabase } from '../../infraestructure/databases/mongodb/MongoConnection';
+import { mongoDbOptions } from './mongoDbOptions.config';
 
 class App {
   public app: any = null;
@@ -23,6 +24,7 @@ class App {
     configMiddlewares(this.app);
 
     // ROUTES INIT
+    this.app.use(express.static('public'));
     routes(this.app);
 
     if (environmentConfig().ENV === 'production') {

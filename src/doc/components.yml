@@ -1,0 +1,255 @@
+components:
+  schemas:
+    BadResponses:
+      type: string
+      enum:
+        - primera
+        - segunda
+
+    User:
+      type: object
+      properties:
+        firstName:
+          type: string
+        lastName:
+          type: string
+        email:
+          type: string
+          format: email
+        password:
+          type: string          
+        image:
+          type: string 
+        role:
+          type: string
+          enum: [USER_ROLE, ADMIN_ROLE]
+        isActive:
+          type: boolean
+        isGoogle:
+          type: boolean
+        token:
+          type: string
+      example:        
+        firstName: fake name
+        lastName: fake lastName
+        email: fake@example.com
+        password: whatever
+        role: USER_ROLE
+        isActive: true
+        isGoogle: false
+        token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI1ZWJhYzUzNDk1NGI1NDEzOTgwNmMxMTIiLCJpYXQiOjE1ODkyOTg0ODQsImV4cCI6MTU4OTMwMDI4NH0.m1U63blB0MLej_WfB7yC2FTMnCziif9X8yzwDEfJXAg
+
+    UserLight:
+      type: object
+      properties:
+        firstName:
+          type: string
+        lastName:
+          type: string
+        email:
+          type: string
+          format: email        
+        image:
+          type: string 
+        role:
+          type: string
+          enum: [USER_ROLE, ADMIN_ROLE]
+        isActive:
+          type: boolean
+        isGoogle:
+          type: boolean
+        uuid:
+          type: string  
+      example:        
+        firstName: fake name
+        lastName: fake lastName
+        email: fake@example.com        
+        role: USER_ROLE
+        isActive: true
+        isGoogle: false
+        uuid: 60a8460c558b6a5facbd915a
+
+    ResponseHeader:
+      type: object
+      properties:
+        code:
+          type: number
+          description: ACK response code
+          example: 200
+        output:
+          type: string
+          description: ACK message for operation type
+          example: Success
+        message:
+          type: string 
+          description: Content message about previously operation
+          example:  Login success
+        details:
+          type: string 
+          description: When message is not enough the other information goes here.
+          example: There is no more information
+
+    Token:
+      type: object
+      properties:
+        token:
+          type: string
+        expires:
+          type: string
+          format: date-time
+      example:
+        token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI1ZWJhYzUzNDk1NGI1NDEzOTgwNmMxMTIiLCJpYXQiOjE1ODkyOTg0ODQsImV4cCI6MTU4OTMwMDI4NH0.m1U63blB0MLej_WfB7yC2FTMnCziif9X8yzwDEfJXAg
+        expires: 2020-05-12T16:18:04.793Z
+
+    AuthTokens:
+      type: object
+      properties:
+        access:
+          $ref: '#/components/schemas/Token'
+        refresh:
+          $ref: '#/components/schemas/Token'
+
+    Error:
+      description: General error handling
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ResponseHeader'
+            body: 
+              type: object
+          example:
+            header:   
+              code: 999
+              output: Error
+              message: error message
+              details: some detail 
+            body:
+              null
+    
+  responses:    
+    BodyLogin:
+      type: object
+      description: Operational information section
+      properties:
+        user:
+          $ref: '#/components/schemas/User'
+        token:
+          $ref: '#/components/schemas/Token'
+
+    IDTokenRequired:
+      description: id_token is required
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ResponseHeader'
+            body: 
+              type: object
+          example:
+            header:   
+              code: 400
+              output: Error
+              message: id_token is required
+              details: null 
+            body:
+              null
+
+    GoogleAuth401:
+      description: Google auth failure
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ResponseHeader'
+            body: 
+              type: object
+          example:
+            header:   
+              code: 401
+              output: Error
+              message: Google auth failure
+              details: Account is disabled 
+            body:
+              null       
+
+    Success200:                                 
+      description: When operation is success
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              header: 
+                $ref: '#/components/schemas/ResponseHeader'
+              body:
+                $ref: '#/components/responses/BodyLogin'        
+
+    Success:
+      description: When operation is success
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              header: 
+                $ref: '#/components/schemas/ResponseHeader'
+              body:
+                $ref: '#/components/schemas/UserLight'
+          example:
+            header:   
+              code: 200
+              output: Success
+              message: Success operation
+              details: no more details
+            body:
+              firstName: fake name
+              lastName: fake lastName
+              email: fake@example.com        
+              role: USER_ROLE
+              isActive: true
+              isGoogle: false
+              uuid: 60a8460c558b6a5facbd915a
+
+    DuplicateEmail:
+      description: Email already taken
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 400
+            message: Email already taken
+
+    Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 401
+            message: Please authenticate
+    Forbidden:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 403
+            message: Forbidden
+    NotFound:
+      description: Not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 404
+            message: Not found
+
+  securitySchemes:
+    jwt: 
+      type: 'http'
+      scheme: 'bearer'
+      in: 'header'
+      bearerFormat: 'JWT'  
+    security: [jwt: []]    

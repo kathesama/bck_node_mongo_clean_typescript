@@ -50,6 +50,10 @@
       "msjsdiag.vscode-react-native",
       "adrianwilczynski.terminal-commands",
       "wayou.vscode-todo-highlight",
-      "pflannery.vscode-versionlens"
+      "pflannery.vscode-versionlens",
+      "rbbit.typescript-hero",
+      "pmneo.tsimporter",
+      "ecmel.vscode-html-css",
+      "lonefy.vscode-js-css-html-formatter"
     ]
 }

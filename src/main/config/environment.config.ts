@@ -1,17 +1,16 @@
 // Reveal pattern
 import dotenv from 'dotenv';
 import Joi from 'joi';
-import fs from 'fs';
-
 import { ServerError } from '../../errors/';
-import { logger } from './logger.config';
 
 dotenv.config();
 export const environmentConfig = (): any => {
   const envVarsSchema = Joi.object()
     .keys({
       NODE_ENV: Joi.string().default('development').valid('production', 'development', 'test').required(),
-      APP_PATH: Joi.string().default('').description('Base app path'),
+      APP_PATH: Joi.string()
+        .default(process.env.INIT_CWD || '')
+        .description('Base app path'),
       SERVER_FINGERKEY: Joi.string().description('Server Random Key '),
       SERVER_URL: Joi.string().description('Public url path'),
       SECURE_SERVER_URL: Joi.string().description('Secure url path'),
@@ -119,38 +118,3 @@ export const environmentConfig = (): any => {
     googleConfig,
   };
 };
-
-// eslint-disable-next-line
-const mongoDbOptions = (): any => {
-  try {
-    const sslCA =
-      environmentConfig().mongooseConfig.IS_TLS === true
-        ? [fs.readFileSync(environmentConfig().mongooseConfig.CA_CERT, 'utf-8')]
-        : [];
-    const sslPass = environmentConfig().mongooseConfig.IS_TLS === true ? environmentConfig().mongooseConfig.CA_TOKEN : '';
-    const sslKey =
-      environmentConfig().mongooseConfig.IS_TLS === true
-        ? fs.readFileSync(environmentConfig().mongooseConfig.KEY_CERT, 'utf-8')
-        : '';
-    const sslCert =
-      environmentConfig().mongooseConfig.IS_TLS === true
-        ? fs.readFileSync(environmentConfig().mongooseConfig.PEM_CERT, 'utf-8')
-        : '';
-
-    const options = {
-      sslCA,
-      sslPass,
-      sslKey,
-      sslCert,
-      ssl: environmentConfig().mongooseConfig.IS_TLS,
-      ...environmentConfig().mongooseConfig.options,
-      dbName: environmentConfig().mongooseConfig.DB_NAME,
-    };
-
-    return options;
-  } catch (error) {
-    logger.error(error);
-  }
-};
-
-export { mongoDbOptions };

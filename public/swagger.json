@@ -1,0 +1,29 @@
+{
+	"components": {
+		"examples": {},
+		"headers": {},
+		"parameters": {},
+		"requestBodies": {},
+		"responses": {},
+		"schemas": {},
+		"securitySchemes": {}
+	},
+	"info": {
+		"title": "granja_backend",
+		"version": "1.0.0",
+		"description": "Backend para el sistema de monitorizacion de granja",
+		"license": {
+			"name": "Apache-2.0"
+		},
+		"contact": {
+			"name": "kathemica@gmail.com"
+		}
+	},
+	"openapi": "3.0.0",
+	"paths": {},
+	"servers": [
+		{
+			"url": "/"
+		}
+	]
+}

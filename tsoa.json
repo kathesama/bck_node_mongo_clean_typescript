@@ -1,0 +1,9 @@
+{
+    "entryFile": "./src/main/server/server.ts",
+    "noImplicitAdditionalProperties": "throw-on-extras",
+    "spec": {
+        "outputDirectory": "public",
+        "specVersion": 3
+    },
+    "ignore": ["**/node_modules/**"]
+}

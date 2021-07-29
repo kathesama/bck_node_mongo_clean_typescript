@@ -2,7 +2,7 @@ import Ddos from 'ddos';
 import { logger, environmentConfig } from '../config';
 
 const onDenial = (req) => {
-  logger.warning('DDOS from ', req);
+  logger.warn('DDOS from ', req);
 };
 
 export const ddos = new Ddos({
