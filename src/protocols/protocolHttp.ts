@@ -1,11 +1,17 @@
 import _ from 'lodash';
 import { UrlObject } from 'url';
-import { InvalidArgument } from '../errors/InvalidArgument';
+import { serverErrorHelper } from '../helpers/http.helper';
+import { logger } from '../main/config';
 
 export class URlLogin {
   static parseURL(urlRef: string): UrlObject {
-    if (_.isEmpty(urlRef)) throw new InvalidArgument('Invalid URL');
-    const newUrl = new URL(urlRef);
-    return newUrl;
+    try {
+      if (_.isEmpty(urlRef)) throw new Error('Invalid URL');
+      const newUrl = new URL(urlRef);
+      return newUrl;
+    } catch (error) {
+      logger.error(error);
+      throw serverErrorHelper(error);
+    }
   }
 }

@@ -1,4 +1,3 @@
-// import testService from '../../domain/services/test.service';
 import TestService from '../../domain/services/test.service';
 import { GetTestInterface, getTestModelInterface } from '../../interfaces/useCaseDTO/getTest.interfaces';
 

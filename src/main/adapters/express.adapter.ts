@@ -1,4 +1,5 @@
 import { Request, Response } from 'express';
+
 import { HttpRequest, HttpResponse } from '../../interfaces/http.interface';
 import { ControllerInterface } from '../../interfaces/controller.interface';
 

@@ -1,5 +1,5 @@
 import { TestModelHelper } from '../../helpers/test.model.helper';
-import { TestModel } from './Test.model';
+import { _TestModel } from './Test.model';
 
 describe('Models', () => {
   it('Class Test: should return properly values', () => {
@@ -7,7 +7,7 @@ describe('Models', () => {
       content: 'Class test content',
     };
 
-    const testModel = new TestModel(testObj);
+    const testModel = new _TestModel(testObj);
 
     expect(testModel.content).toEqual('Class test content');
   });

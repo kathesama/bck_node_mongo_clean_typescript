@@ -1,4 +1,5 @@
 import { Router } from 'express';
+
 import { AdapterRoute } from '../adapters/express.adapter';
 import { makeTestFactorie } from '../factories/test.factorie';
 

@@ -4,11 +4,11 @@ import express from 'express';
 
 import routes from './config.routes';
 import { logger } from './logger.config';
-import { ServerError } from '../../errors';
 import configMiddlewares from './middlewares.config';
 import { environmentConfig } from './environment.config';
 import { connectDatabase } from '../../infraestructure/databases/mongodb/MongoConnection';
 import { mongoDbOptions } from './mongoDbOptions.config';
+import { serverErrorHelper } from '../../helpers/http.helper';
 
 class App {
   public app: any = null;
@@ -46,7 +46,7 @@ class App {
         logger.info(`Server up at port: \x1b[32m%s\x1b[0m`, `${environmentConfig().serverConfig.PORT}`);
       });
     } catch (error) {
-      throw new Error(`Config validation error: ${error.message}`);
+      throw serverErrorHelper(new Error(`Config validation error: ${error.message}`));
     }
   }
 
@@ -57,7 +57,7 @@ class App {
         logger.info(`Server up at port: \x1b[32m%s\x1b[0m`, `${environmentConfig().serverConfig.PORT}`);
       });
     } catch (error) {
-      throw new Error(`Config validation error: ${error.message}`);
+      throw serverErrorHelper(new Error(`Config validation error: ${error.message}`));
     }
   }
 
@@ -67,7 +67,7 @@ class App {
 
       connectDatabase(environmentConfig().mongooseConfig.URL, mongoDbOptions());
     } catch (error) {
-      throw new ServerError(`${error.message}`);
+      throw serverErrorHelper(new Error(`${error.message}`));
     }
   }
 

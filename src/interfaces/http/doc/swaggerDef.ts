@@ -1,4 +1,4 @@
-import { environmentConfig } from '../main/config/';
+import { environmentConfig } from '../../../main/config';
 
 const swaggerDef = {
   openapi: '3.0.0',

@@ -1,7 +1,8 @@
 // Reveal pattern
 import dotenv from 'dotenv';
 import Joi from 'joi';
-import { ServerError } from '../../errors/';
+import { Error } from 'mongoose';
+import { serverErrorHelper } from '../../helpers/http.helper';
 
 dotenv.config();
 export const environmentConfig = (): any => {
@@ -50,7 +51,7 @@ export const environmentConfig = (): any => {
   const { value: envVars, error } = envVarsSchema.prefs({ errors: { label: 'key' } }).validate(process.env);
 
   if (error) {
-    throw new ServerError(`Config validation error: ${error.message}`);
+    throw serverErrorHelper(new Error(`Config validation error: ${error.message}`));
   }
 
   const { APP_PATH } = envVars;

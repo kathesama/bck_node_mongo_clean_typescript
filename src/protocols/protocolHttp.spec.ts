@@ -1,4 +1,5 @@
-import { InvalidArgument } from '../errors/InvalidArgument';
+/* eslint-disable jest/no-conditional-expect */
+import { serverErrorHelper } from '../helpers/http.helper';
 import { URlLogin } from './protocolHttp';
 
 describe('Protocols and Query', () => {
@@ -26,10 +27,14 @@ describe('Protocols and Query', () => {
   });
 
   it('User invalid URL', () => {
-    const expectError = (): void => {
+    try {
       URlLogin.parseURL('');
-    };
+    } catch (err) {
+      // console.log(err);
+      const error = serverErrorHelper(new Error('Error: Invalid URL'));
 
-    expect(expectError).toThrowError(new InvalidArgument('Invalid URL'));
+      // eslint-disable-next-line jest/no-try-expect
+      expect(err.statusCode).toEqual(error.statusCode);
+    }
   });
 });

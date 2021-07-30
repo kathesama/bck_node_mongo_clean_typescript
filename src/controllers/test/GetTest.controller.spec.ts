@@ -1,6 +1,6 @@
 /* eslint-disable jest/no-try-expect */
 import { GetTestUseCaseDB } from '../../data/backEndUseCases/getTest.db';
-import { ServerError } from '../../errors';
+// import { ServerError } from '../../interfaces/http/errors';
 import { serverErrorHelper, successHelper } from '../../helpers/http.helper';
 import { HttpResponse } from '../../interfaces/http.interface';
 import { GetTest } from './GetTest.controller';
@@ -37,7 +37,7 @@ describe('Controller', () => {
 
     const httpResponse = await getTest.handle();
     expect(httpResponse['statusCode']).toEqual(500);
-    expect(httpResponse.body.name).toEqual('Error Internal in the Server');
+    expect(httpResponse.body.name).toEqual('Internal Server Error');
   });
 
   it('should get success mocking getTestUseCaseDB', async () => {
@@ -57,8 +57,8 @@ describe('Controller', () => {
     const getTestUseCaseDB = new GetTestUseCaseDB();
 
     const mockGetTestAddListener = jest.spyOn(getTestUseCaseDB, 'get');
-    // const response: any = serverErrorHelper(new Error('Error on data'));
-    const response: any = serverErrorHelper(new ServerError('Error on data'));
+    const response: any = serverErrorHelper(new Error('Error on data'));
+    // const response: any = serverErrorHelper(new ServerError('Error on data'));
     mockGetTestAddListener.mockImplementation(() => Promise.reject(response));
     const getTest = new GetTest(getTestUseCaseDB);
 
