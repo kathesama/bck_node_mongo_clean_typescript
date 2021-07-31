@@ -1,17 +1,18 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable no-unused-vars */
-
 import { RoleModel } from '../models/Role.model';
 import RoleRepository from '../repositories/role.repository';
 
 class RoleService {
   async get(): Promise<any> {
-    const all: any = RoleRepository.find({});
+    const query = { isActive: true };
+    const all: any = RoleRepository.find(query);
     return all;
   }
 
   async getById(id: string): Promise<any> {
-    const one: any = RoleRepository.findById(id);
+    const query = {
+      $and: [{ _id: id }, { isActive: true }],
+    };
+    const one: any = RoleRepository.find(query);
     return one;
   }
 
@@ -19,6 +20,20 @@ class RoleService {
     const one: any = RoleRepository.create(role);
     return one;
   }
+
+  async patch(id: string, role: RoleModel): Promise<any> {
+    const one: any = RoleRepository.findByIdAndUpdate(id, role, {
+      returnOriginal: false,
+    });
+
+    return one;
+  }
+
+  async delete(id: string): Promise<any> {
+    const one: any = RoleRepository.findByIdAndUpdate(id, { isActive: false }, { returnOriginal: false });
+
+    return one;
+  }
 }
 
-export default RoleService;
+export default new RoleService();

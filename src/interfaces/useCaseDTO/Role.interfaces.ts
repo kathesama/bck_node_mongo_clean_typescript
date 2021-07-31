@@ -18,3 +18,13 @@ export interface AddRoleInterface {
   // eslint-disable-next-line no-unused-vars
   add: (role: RoleModel) => Promise<IRoleModelInterface>;
 }
+
+export interface PatchRoleInterface {
+  // eslint-disable-next-line no-unused-vars
+  patch: (id: string, role: RoleModel) => Promise<IRoleModelInterface>;
+}
+
+export interface DeleteRoleInterface {
+  // eslint-disable-next-line no-unused-vars
+  delete: (id: string) => Promise<IRoleModelInterface>;
+}

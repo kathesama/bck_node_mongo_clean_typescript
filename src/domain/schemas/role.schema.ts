@@ -1,13 +1,16 @@
 import mongoose from 'mongoose';
 
 const { Schema } = mongoose;
-// import toJSON from '../plugins/toJSON.plugin.js';
 
 const roleSchema = new Schema(
   {
     role: {
       type: String,
       required: [true, 'role is mandatory'],
+    },
+    isActive: {
+      type: Boolean,
+      default: false,
     },
   },
   { timestamps: true }
