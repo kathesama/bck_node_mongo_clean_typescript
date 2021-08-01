@@ -1,14 +1,14 @@
 export class GenericError extends Error {
   name: string;
   content: string;
-  code?: number | string;
+  statusCode?: number | string;
   timestamp?: Date;
 
-  constructor(error: Error, code: number | string = 'UNINITIALIZED', timestamp: Date = new Date()) {
+  constructor(error: Error | any, code: number | string = 'UNINITIALIZED', errorName: string, timestamp: Date = new Date()) {
     super(`${error}`);
-    this.name = `${error.name}`;
+    this.name = `${errorName}`;
     this.content = `${error.message}`;
-    this.code = code;
+    this.statusCode = code;
     this.timestamp = timestamp;
     Error.captureStackTrace(this, this.constructor);
   }

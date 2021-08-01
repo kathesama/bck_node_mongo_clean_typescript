@@ -1,8 +1,17 @@
 import { RoleModel } from '../../domain/models/Role.model';
 import RoleService from '../../domain/services/role.service';
-import { GetRoleInterface, IRoleModelInterface } from '../../interfaces/useCaseDTO/Role.interfaces';
+import {
+  AddRoleInterface,
+  DeleteRoleInterface,
+  GetOneRoleInterface,
+  GetRoleInterface,
+  IRoleModelInterface,
+  PatchRoleInterface,
+} from '../../interfaces/useCaseDTO/Role.interfaces';
 
-export class HandleRoleUseCaseDB implements GetRoleInterface {
+export class HandleRoleUseCaseDB
+  implements GetRoleInterface, GetOneRoleInterface, AddRoleInterface, PatchRoleInterface, DeleteRoleInterface
+{
   roleService: any;
 
   constructor() {

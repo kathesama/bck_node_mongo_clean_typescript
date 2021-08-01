@@ -1,24 +1,33 @@
-// import { ServerError } from '../interfaces/http/errors/_ServerError';
+import { Response } from 'express';
 import { HttpResponse } from '../interfaces/http.interface';
-// import { MissingFormalParamenter } from '../interfaces/http/errors';
 import { GenericError } from '../interfaces/http/errors/GenericError';
 
 export const serverErrorHelper = (error: Error): HttpResponse => {
-  error.name = 'Internal Server Error';
+  const name = 'Internal Server Error';
 
   return {
     statusCode: 500,
-    body: new GenericError(error, 400),
+    body: new GenericError(error, 500, name),
   };
 };
 
 export const badRequestHelper = (error: Error): HttpResponse => {
-  error.name = 'Missing Paramenter ';
+  const name = 'Missing Paramenter ';
 
   return {
     statusCode: 400,
-    body: new GenericError(error, 400),
+    body: new GenericError(error, 400, name),
   };
+};
+
+export const clientRequestHelper = (res: Response, errCode: number, error: string): Response => {
+  const responseObject = {
+    name: 'Client error response ',
+    statusCode: errCode,
+    content: error,
+    timestamp: new Date().toISOString(),
+  };
+  return res.status(errCode).json(responseObject);
 };
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types

@@ -5,6 +5,7 @@ import { logger } from '../../../main/config/';
 const callback = (err?: MongoError): any => {
   if (err) {
     logger.error(err.message);
+    // logger.error('error:' + err.message);
   } else {
     // eslint-disable-next-line quotes
     logger.info(`Conectado a DB en el puerto: 27017 -> \x1b[32m%s\x1b[0m`, `online`);

@@ -10,9 +10,9 @@ import {
 } from '../factories/role.factorie';
 
 export default (router: Router): void => {
-  router.get('/role', AdapterRoute(makeGetAllRoleFactorie()));
-  router.get('/role/:id', AdapterRoute(makeGetOneRoleFactorie()));
-  router.post('/role/', AdapterRoute(makeRegisterRoleFactorie()));
-  router.patch('/role/:id', AdapterRoute(makeUpdateRoleFactorie()));
-  router.delete('/role/:id', AdapterRoute(makeDeleteRoleFactorie()));
+  router.get('/roles', AdapterRoute(makeGetAllRoleFactorie()));
+  router.get('/roles/:id', AdapterRoute(makeGetOneRoleFactorie()));
+  router.post('/roles/', AdapterRoute(makeRegisterRoleFactorie()));
+  router.patch('/roles/:id', AdapterRoute(makeUpdateRoleFactorie()));
+  router.delete('/roles/:id', AdapterRoute(makeDeleteRoleFactorie()));
 };
