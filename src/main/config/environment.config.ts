@@ -24,12 +24,8 @@ export const environmentConfig = (): any => {
       JWT_SECRET: Joi.string().default('').description('JWT secret key').required(),
       JWT_ACCESS_EXPIRATION_MINUTES: Joi.string().default('30m').description('minutes after which access tokens expire'),
       JWT_REFRESH_EXPIRATION_DAYS: Joi.string().default('d').description('days after which refresh tokens expire'),
-      JWT_RESET_PASSWORD_EXPIRATION_MINUTES: Joi.string()
-        .default('m')
-        .description('minutes after which reset password token expires'),
-      JWT_VERIFY_EMAIL_EXPIRATION_MINUTES: Joi.string()
-        .default('10m')
-        .description('minutes after which verify email token expires'),
+      JWT_RESET_PASSWORD_EXPIRATION_MINUTES: Joi.string().default('m').description('minutes after which reset password token expires'),
+      JWT_VERIFY_EMAIL_EXPIRATION_MINUTES: Joi.string().default('10m').description('minutes after which verify email token expires'),
       MAIL_OWNER: Joi.string().description('owner for mail service'),
       MAIL_USERNAME: Joi.string().description('username for email server'),
       MAIL_FROM: Joi.string().description('the from field in the emails sent by the app'),

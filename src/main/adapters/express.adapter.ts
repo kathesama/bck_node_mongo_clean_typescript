@@ -12,6 +12,9 @@ export const AdapterRoute = (controller: ControllerInterface) => {
       params: req.params,
       headers: req.headers,
       query: req.query,
+      fingerprint: req.fingerprint,
+      language: req.language,
+      user: req.user,
     };
 
     const httpResponse: HttpResponse = await controller.handle(httpRequest);

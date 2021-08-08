@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+// eslint-disable-next-line no-unused-vars
 /**
  * Create an object composed of the picked object properties
  * @param {Object} object
@@ -9,13 +11,15 @@ import { isEqual } from 'lodash';
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 const pick = (object: any, keys: any): Record<string, unknown> => {
-  return keys.reduce((obj: any, key: any) => {
-    if (object && Object.prototype.hasOwnProperty.call(object, key)) {
-      // eslint-disable-next-line no-param-reassign
+  const temp = keys.reduce((obj: any, key: any) => {
+    // if (object && Object.prototype.hasOwnProperty.call(object, key)) {
+    if ((object && Object.prototype.hasOwnProperty.call(object, key)) || isEqual(key, 'headers')) {
       obj[key] = object[key];
     }
     return obj;
   }, {});
+
+  return temp;
 };
 
 export default pick;

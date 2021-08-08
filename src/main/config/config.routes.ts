@@ -4,9 +4,7 @@ import swaggerUi from 'swagger-ui-express';
 // import { environmentConfig } from './environment.config';
 
 const loadRoutes = (router: Router) => {
-  fg.sync('**/src/main/routes/**routes.ts', { ignore: [] }).map(async (file) =>
-    (await import(`../../../${file}`)).default(router)
-  );
+  fg.sync('**/src/main/routes/**routes.ts', { ignore: [] }).map(async (file) => (await import(`../../../${file}`)).default(router));
 };
 
 export default (app: Express): void => {

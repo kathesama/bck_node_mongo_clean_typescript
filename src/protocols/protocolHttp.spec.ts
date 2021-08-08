@@ -16,9 +16,7 @@ describe('Protocols and Query', () => {
       password: 'password',
     };
 
-    const parsedURL = URlLogin.parseURL(
-      `http://localhost:3000/login?user=${expectedAuth['user']}&password=${expectedAuth['password']}`
-    );
+    const parsedURL = URlLogin.parseURL(`http://localhost:3000/login?user=${expectedAuth['user']}&password=${expectedAuth['password']}`);
 
     // Object.fromEntries convierte un map object en un objeto JS
     const parsedURLQuery = Object.fromEntries(new URLSearchParams(parsedURL.search));
