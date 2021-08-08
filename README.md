@@ -11,7 +11,7 @@
 [![GitHub stars](https://img.shields.io/github/stars/kathesama/bck_node_mongo_clean?style=plastic)](https://github.com/kathesama/bck_node_mongo_clean/stargazers)
 <br>
 ![GitHub last commit](https://img.shields.io/github/last-commit/kathesama/bck_node_mongo_clean?color=red&style=plastic)
-![GitHub version commits](https://img.shields.io/github/commits-since/kathesama/bck_node_mongo_clean/V1.0.0.svg?color=yellow&style=plastic)
+![GitHub version commits](https://img.shields.io/github/commits-since/kathesama/bck_node_mongo_clean/V2.0.0.svg?color=yellow&style=plastic)
 ![GitHub top language](https://img.shields.io/github/languages/top/kathesama/bck_node_mongo_clean?style=plastic)
 <br>
 ![Maintaned](https://img.shields.io/badge/Maintained%3F-yes-green.svg?style=plastic)
