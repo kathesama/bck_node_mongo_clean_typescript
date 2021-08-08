@@ -37,12 +37,7 @@ export const clientRequestHelper = (res: Response, errCode: number, error: strin
     timestamp: new Date().toISOString(),
   };
 
-  // writeHead(httpResponse.statusCode, { 'Cache-Control': 'no-cache' })
   return res.status(errCode).json(responseObject);
-  // return {
-  //   statusCode: errCode,
-  //   body: responseObject,
-  // };
 };
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types

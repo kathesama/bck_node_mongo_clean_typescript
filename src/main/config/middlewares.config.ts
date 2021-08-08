@@ -12,10 +12,5 @@ export default (app: Express): void => {
   app.use(ddos.express);
   app.use(apiRatelimit);
   app.use(helmet());
-  // app.use(helmet.noCache());
-  // app.use(noCache);
   app.use(nocache());
-  // app.use(function (req, res, next) {
-  //   res.set('Cache-Control', 'public, max-age=0');
-  // });
 };
