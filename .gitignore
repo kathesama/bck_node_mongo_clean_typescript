@@ -108,3 +108,4 @@ dist
 /certs/https/server-cert.pem
 /certs/https/server-csr.pem
 /certs/https/server-key.pem
+/certs/client.crt
