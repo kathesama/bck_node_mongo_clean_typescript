@@ -3,13 +3,16 @@ import UserService from '../../domain/services/user.service';
 import {
   AddUserInterface,
   DeleteUserInterface,
+  GetOneUserAndUpdateInterface,
   GetOneUserInterface,
   GetUserInterface,
   IUserModelInterface,
   PatchUserInterface,
 } from '../../interfaces/useCaseDTO/User.interfaces';
 
-export class HandleUserUseCaseDB implements GetUserInterface, GetOneUserInterface, AddUserInterface, PatchUserInterface, DeleteUserInterface {
+export class HandleUserUseCaseDB
+  implements GetUserInterface, GetOneUserInterface, AddUserInterface, PatchUserInterface, DeleteUserInterface, GetOneUserAndUpdateInterface
+{
   userService: any;
 
   constructor() {
@@ -25,6 +28,12 @@ export class HandleUserUseCaseDB implements GetUserInterface, GetOneUserInterfac
 
   async getOne(user: string): Promise<IUserModelInterface> {
     const userDB: any = await this.userService.getById(user);
+
+    return new Promise((resolve) => resolve(userDB));
+  }
+
+  async findOneAndActivate(user: string): Promise<IUserModelInterface> {
+    const userDB: any = await this.userService.findOneAndActivate(user);
 
     return new Promise((resolve) => resolve(userDB));
   }

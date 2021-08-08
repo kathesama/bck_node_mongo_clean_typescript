@@ -6,18 +6,12 @@ import { StatusCodes, ReasonPhrases } from 'http-status-codes';
 import { badRequestHelper } from '../../helpers/http.helper';
 import { environmentConfig, logger } from '../../main/config';
 
-import { TokenModel } from '../models/Token.model';
 import TokenRepository from '../repositories/token.repository';
 import { tokenTypes } from '../enums/token.enum';
 import { GenericError } from '../../interfaces/http/errors';
-import { isEqual } from 'lodash';
+import { isEqual, isNil } from 'lodash';
 
 class TokenService {
-  async add(token: TokenModel): Promise<any> {
-    const one: any = TokenRepository.create(token);
-    return one;
-  }
-
   /**
    * Delete auth tokens
    * @param {Object} query with user, type and fingerprint (optional)
@@ -133,26 +127,26 @@ class TokenService {
   };
 
   private generateNewToken = async (user: string, fingerprint: string, tokenType: string): Promise<any> => {
-    const accessTokenExpires = isEqual(tokenType, tokenTypes.REFRESH)
+    const newTokenExpires = isEqual(tokenType, tokenTypes.REFRESH)
       ? moment().add(environmentConfig().jwtConfig.refreshExpirationDays, 'days')
       : moment().add(environmentConfig().jwtConfig.accessExpirationMinutes, 'minutes');
 
-    const accessToken = this.getTypedToken(user, accessTokenExpires, tokenType);
+    const newToken = this.getTypedToken(user, newTokenExpires, tokenType);
 
-    await this.saveToken(accessToken, user, fingerprint, accessTokenExpires, tokenType);
+    await this.saveToken(newToken, user, fingerprint, newTokenExpires, tokenType);
 
     return {
-      token: accessToken,
-      expires: accessTokenExpires.utc(true).toDate(),
+      token: newToken,
+      expires: newTokenExpires.utc(true).toDate(),
     };
   };
 
   private getActualToken = async (user: string, fingerprint: string, tokenType: string): Promise<any> => {
     try {
-      const accessTokenExpires = await this.loadToken(user, fingerprint, tokenType, false);
+      const actualTokenExpires = await this.loadToken(user, fingerprint, tokenType, false);
       return {
-        token: accessTokenExpires._doc.token,
-        expires: accessTokenExpires._doc.expires,
+        token: actualTokenExpires._doc.token,
+        expires: actualTokenExpires._doc.expires,
       };
     } catch (error) {
       throw new GenericError(error.message, StatusCodes.INTERNAL_SERVER_ERROR, ReasonPhrases.INTERNAL_SERVER_ERROR);
@@ -220,6 +214,19 @@ class TokenService {
     return tokenArray;
   };
 
+  /**
+ * Generate verify email token
+ * @param {User} user
+ * @returns {Promise<string>}
+ */
+  generateVerifyEmailToken = async(user: any, fingerprint: string): Promise<string> => {
+    const expires = moment().add(environmentConfig().jwtConfig.verifyEmailExpirationMinutes, 'minutes');
+    const verifyEmailToken = this.getTypedToken(user, expires, tokenTypes.VERIFY_EMAIL);
+
+    await this.saveToken(verifyEmailToken, user, fingerprint, expires, tokenTypes.VERIFY_EMAIL);
+    return verifyEmailToken;
+  };
+
   //------------------------------------------------------------
   generateJWT = (uuid = '') => {
     return new Promise((resolve, reject) => {
@@ -258,8 +265,12 @@ class TokenService {
         return decoded;
       });
 
+      const { uuid } = payload['sub'];
+
+      const userData = !isNil(uuid) ? uuid : payload['sub'];
+
       // eslint-disable-next-line prefer-const
-      let query = { token, type, user: payload.sub.uuid, blacklisted: false };
+      let query = { token, type, user: userData, blacklisted: false };
 
       if (fingerprint.length > 0) {
         query['fingerprint'] = fingerprint;
@@ -277,6 +288,20 @@ class TokenService {
       // return badRequestHelper(`Failure on Security Token, [${err.message}]`, ReasonPhrases.UNAUTHORIZED, StatusCodes.UNAUTHORIZED);
     }
   };
+
+  async blacklistToken(token: string): Promise<any> {
+    const query = {
+      _id: token,
+      type: tokenTypes.VERIFY_EMAIL,
+    };
+
+    const update = {
+      $set:{ blacklisted: true }
+    };
+
+    const one: any = await TokenRepository.findOneAndUpdate(query, update, { returnOriginal: false });
+    return one;
+  }
 }
 
 export default new TokenService();

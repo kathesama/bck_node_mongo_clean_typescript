@@ -27,7 +27,7 @@ export class UserModel implements IUserModelInterface {
     this.age = age || 0;
     this.image = image || '';
     this.role = role || 'USER_ROLE';
-    this.isActive = isActive || true;
+    this.isActive = isActive || false;
   }
 
   toJson(): any {

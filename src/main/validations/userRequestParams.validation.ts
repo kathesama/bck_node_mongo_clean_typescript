@@ -4,11 +4,14 @@ import { rolesTypes } from '../../domain/enums/roles.enum';
 import { password, objectId, acceptedLanguage } from './customRequestParams.validation';
 
 const createUser = {
+  headers: Joi.object().keys({
+    'accept-language': Joi.required().custom(acceptedLanguage),
+  }),
   body: Joi.object().keys({
     email: Joi.string().required().email(),
     password: Joi.string().required().custom(password),
-    firstName: Joi.string().alphanum().required(),
-    lastName: Joi.string().alphanum().required(),
+    firstName: Joi.string().alphanum().optional(),
+    lastName: Joi.string().alphanum().optional(),
     role: Joi.string()
       .required()
       .valid(...Object.values(rolesTypes))
@@ -16,9 +19,16 @@ const createUser = {
         'any.only': '{#label} is invalid!',
       }),
   }),
+  options: {
+    cache: false,
+    allowUnknown: true,
+  },
 };
 
 const getUsers = {
+  headers: Joi.object().keys({
+    'accept-language': Joi.required().custom(acceptedLanguage),
+  }),
   query: Joi.object().keys({
     name: Joi.string(),
     role: Joi.string(),
@@ -27,15 +37,29 @@ const getUsers = {
     page: Joi.number().integer(),
     from: Joi.number().integer(),
   }),
+  options: {
+    cache: false,
+    allowUnknown: true,
+  },
 };
 
 const getUser = {
+  headers: Joi.object().keys({
+    'accept-language': Joi.required().custom(acceptedLanguage),
+  }),
   params: Joi.object().keys({
     userId: Joi.string().custom(objectId),
   }),
+  options: {
+    cache: false,
+    allowUnknown: true,
+  },
 };
 
 const updateUser = {
+  headers: Joi.object().keys({
+    'accept-language': Joi.required().custom(acceptedLanguage),
+  }),
   params: Joi.object().keys({
     userId: Joi.required().custom(objectId),
   }),
@@ -56,12 +80,23 @@ const updateUser = {
         .optional(),
     })
     .min(1),
+    options: {
+      cache: false,
+      allowUnknown: true,
+    },
 };
 
 const deleteUser = {
+  headers: Joi.object().keys({
+    'accept-language': Joi.required().custom(acceptedLanguage),
+  }),
   params: Joi.object().keys({
     userId: Joi.string().custom(objectId),
   }),
+  options: {
+    cache: false,
+    allowUnknown: true,
+  },
 };
 
 const loginUser = {
@@ -80,10 +115,30 @@ const loginUser = {
 };
 
 const reauthenticateUser = {
+  headers: Joi.object().keys({
+    'accept-language': Joi.required().custom(acceptedLanguage),
+  }),
   body: Joi.object().keys({
     deletePreviousTokens: Joi.boolean().default(true).optional(),
     option: Joi.string().default('reauthenticate').optional(),
   }),
+  options: {
+    cache: false,
+    allowUnknown: true,
+  },
 };
 
-export { createUser, getUsers, getUser, updateUser, deleteUser, loginUser, reauthenticateUser };
+const verifyUserEmail = {
+  headers: Joi.object().keys({
+    'accept-language': Joi.required().custom(acceptedLanguage),
+  }),
+  query: Joi.object().keys({
+    key: Joi.string().required()
+  }),
+  options: {
+    cache: false,
+    allowUnknown: true,
+  },
+};
+
+export { createUser, getUsers, getUser, updateUser, deleteUser, loginUser, reauthenticateUser, verifyUserEmail };

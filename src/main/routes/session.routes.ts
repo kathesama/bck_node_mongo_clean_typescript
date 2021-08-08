@@ -13,6 +13,7 @@ import {
 import * as userValidation from '../validations/userRequestParams.validation';
 import { authorize } from '../validations/authorize.validation';
 import { tokenTypes } from '../../domain/enums/token.enum';
+// import { makeRegisterUserFactorie } from '../factories/user.factorie';
 
 export default (router: Router): void => {
   router.route('/login/').post([validateRequestParams(userValidation.loginUser)], AdapterRoute(makeLoginFactorie()));

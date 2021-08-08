@@ -55,6 +55,20 @@ class UserService {
     const one: any = UserRepository.findByIdAndUpdate(id, { isActive: false }, { returnOriginal: false });
     return one;
   }
+
+  async findOneAndActivate(id: string): Promise<any> {
+    const query = {
+      _id: id,
+      isActive: false,
+    };
+
+    const update = {
+      $set: { isActive: true },
+    };
+
+    const one: any = await UserRepository.findOneAndUpdate(query, update, { returnOriginal: false });
+    return one;
+  }
 }
 
 export default new UserService();

@@ -1,7 +1,7 @@
 import { HandleUserUseCaseDB } from '../../data/backEndUseCases/handleUsers.db';
 import { RegisterUserFactorie } from '../../controllers/user/PostUser.controller';
 
-import { GetAllUser, GetOneUser } from '../../controllers/user/GetUser.controller';
+import { GetAllUser, GetOneUser, GetVerifyMailUser } from '../../controllers/user/GetUser.controller';
 import { PatchUserFactorie } from '../../controllers/user/PatchUser.controller';
 import { DeleteUserFactorie } from '../../controllers/user/DeleteUser.controller';
 import { BcryptAdapter } from '../adapters/bcrypt.adapter';
@@ -44,6 +44,14 @@ export const makeDeleteUserFactorie = (): DeleteUserFactorie => {
   const handleUserDB = new HandleUserUseCaseDB();
 
   const handledUserRegister = new DeleteUserFactorie(handleUserDB);
+
+  return handledUserRegister;
+};
+
+export const makeVerifyUserEmailFactorie = (): GetVerifyMailUser => {
+  const handleUserDB = new HandleUserUseCaseDB();
+
+  const handledUserRegister = new GetVerifyMailUser(handleUserDB);
 
   return handledUserRegister;
 };
