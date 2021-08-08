@@ -9,9 +9,7 @@ import {
   PatchUserInterface,
 } from '../../interfaces/useCaseDTO/User.interfaces';
 
-export class HandleUserUseCaseDB
-  implements GetUserInterface, GetOneUserInterface, AddUserInterface, PatchUserInterface, DeleteUserInterface
-{
+export class HandleUserUseCaseDB implements GetUserInterface, GetOneUserInterface, AddUserInterface, PatchUserInterface, DeleteUserInterface {
   userService: any;
 
   constructor() {

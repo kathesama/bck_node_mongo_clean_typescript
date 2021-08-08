@@ -1,7 +1,7 @@
 import { Response } from 'express';
 import { ReasonPhrases, StatusCodes } from 'http-status-codes';
 import { isNil, isNaN, isEmpty } from 'lodash';
-import { languageTypes } from '../domain/enums/languaje.enum';
+import { languageTypes } from '../domain/enums/language.enum';
 import { HttpRequest, HttpResponse } from '../interfaces/http.interface';
 import { GenericError } from '../interfaces/http/errors/GenericError';
 

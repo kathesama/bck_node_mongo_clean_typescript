@@ -4,6 +4,7 @@ import { RegisterUserFactorie } from '../../controllers/user/PostUser.controller
 import { GetAllUser, GetOneUser } from '../../controllers/user/GetUser.controller';
 import { PatchUserFactorie } from '../../controllers/user/PatchUser.controller';
 import { DeleteUserFactorie } from '../../controllers/user/DeleteUser.controller';
+import { BcryptAdapter } from '../adapters/bcrypt.adapter';
 
 // inyeccion de dependencias
 export const makeGetAllUserFactorie = (): GetAllUser => {
@@ -24,8 +25,9 @@ export const makeGetOneUserFactorie = (): GetOneUser => {
 
 export const makeRegisterUserFactorie = (): RegisterUserFactorie => {
   const handleUserDB = new HandleUserUseCaseDB();
+  const dcryptAdapter = new BcryptAdapter();
 
-  const handledUserRegister = new RegisterUserFactorie(handleUserDB);
+  const handledUserRegister = new RegisterUserFactorie(handleUserDB, dcryptAdapter);
 
   return handledUserRegister;
 };

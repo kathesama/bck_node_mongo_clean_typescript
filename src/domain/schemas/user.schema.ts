@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 // import validator from 'validator';
-import { rolesTypes } from '../plugins/roles.enum';
+import { rolesTypes } from '../enums/roles.enum';
 
 const { Schema } = mongoose;
 

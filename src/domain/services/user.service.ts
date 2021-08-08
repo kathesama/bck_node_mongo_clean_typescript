@@ -21,6 +21,15 @@ class UserService {
     return one;
   }
 
+  async getByEmail(email: string): Promise<UserModel> {
+    const query = {
+      $and: [{ email: email }, { isActive: true }],
+    };
+    // findOne devuelve un solo elemento, find devuelve un array
+    const one: any = UserRepository.findOne(query);
+    return one;
+  }
+
   async getAllById(id: string): Promise<UserModel> {
     const query = {
       $and: [{ _id: id }],

@@ -5,10 +5,13 @@ import { HttpRequest, HttpResponse } from '../../interfaces/http.interface';
 
 import { AddUserInterface } from '../../interfaces/useCaseDTO/User.interfaces';
 import { logger } from '../../main/config';
+import { Cryptography } from '../../interfaces/encryptor.interface';
+import { UserModel } from '../../domain/models/User.model';
 // import { UserModel } from '../../domain/models/User.model';
 
 export class RegisterUserFactorie implements ControllerInterface {
-  constructor(private readonly addUser: AddUserInterface) {
+  // eslint-disable-next-line no-unused-vars
+  constructor(private readonly addUser: AddUserInterface, private readonly dcrypt: Cryptography) {
     this.addUser = addUser;
   }
 
@@ -21,23 +24,11 @@ export class RegisterUserFactorie implements ControllerInterface {
         }
       }
 
-      const user: {
-        email: string;
-        password: string;
-        firstName: string;
-        lastName: string;
-        age: number;
-        image: string;
-        role: string;
-        isActive: boolean;
-      } = httpRequest.body;
+      const { email, password, firstName, lastName, age, image, role, isActive } = httpRequest.body;
 
-      // const { role } = httpRequest.body;
-      // const user = new UserModel(email, password, firstName, lastName, age, image, role, isActive);
+      const crypPassword: string = await this.dcrypt.encrypt(password);
 
-      // const obj = new UserModel();
-
-      const roleAdded: any = await this.addUser.add(user);
+      const roleAdded: any = await this.addUser.add(new UserModel(email, crypPassword, firstName, lastName, age, image, role, isActive));
 
       return successHelper(roleAdded);
     } catch (error) {

@@ -30,7 +30,7 @@ export class UserModel implements IUserModelInterface {
     this.isActive = isActive || true;
   }
 
-  get toJson(): string {
+  toJson(): any {
     const obj = {
       email: this.email,
       password: this.password,

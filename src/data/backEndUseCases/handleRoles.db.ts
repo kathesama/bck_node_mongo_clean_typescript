@@ -9,9 +9,7 @@ import {
   PatchRoleInterface,
 } from '../../interfaces/useCaseDTO/Role.interfaces';
 
-export class HandleRoleUseCaseDB
-  implements GetRoleInterface, GetOneRoleInterface, AddRoleInterface, PatchRoleInterface, DeleteRoleInterface
-{
+export class HandleRoleUseCaseDB implements GetRoleInterface, GetOneRoleInterface, AddRoleInterface, PatchRoleInterface, DeleteRoleInterface {
   roleService: any;
 
   constructor() {

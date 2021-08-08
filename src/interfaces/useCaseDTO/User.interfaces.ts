@@ -10,6 +10,8 @@ export interface IUserModelInterface {
   image: string;
   role: string;
   isActive: boolean;
+
+  toJson(): string;
 }
 
 export interface GetUserInterface {
