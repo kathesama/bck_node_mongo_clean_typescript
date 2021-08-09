@@ -16,6 +16,22 @@ class TokenService {
     });
   };
 
+  // public blacklistToken = async (token: string, tokenType: string): Promise<any> => {
+  public blacklistToken = async (query: any): Promise<any> => {
+    // const query = {
+    //   _id: token,
+    //   type: tokenType,
+    // };
+
+    const update = {
+      $set: { blacklisted: true },
+    };
+
+    // const one: any = await TokenRepository.findOneAndUpdate(query, update, { returnOriginal: false });
+    const one: any = await TokenRepository.updateMany(query, update, { returnOriginal: false });
+    return one;
+  };
+
   public findOne = async (token: any): Promise<any> => {
     return TokenRepository.findOne(token, (err: any) => {
       if (err) {
@@ -31,20 +47,6 @@ class TokenService {
 
   public findOneAndUpdate = async (query: any, update: any): Promise<any> => {
     return TokenRepository.findOneAndUpdate(query, update, { returnOriginal: false });
-  };
-
-  public blacklistToken = async (token: string, tokenType: string): Promise<any> => {
-    const query = {
-      _id: token,
-      type: tokenType,
-    };
-
-    const update = {
-      $set: { blacklisted: true },
-    };
-
-    const one: any = await TokenRepository.findOneAndUpdate(query, update, { returnOriginal: false });
-    return one;
   };
 }
 

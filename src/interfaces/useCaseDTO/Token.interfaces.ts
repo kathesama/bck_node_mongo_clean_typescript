@@ -59,5 +59,6 @@ export interface handleVerifyTokenInterface {
 
 export interface handleBlacklistTokenInterface {
   // eslint-disable-next-line no-unused-vars
-  blacklistToken: (token: string, tokenType: string) => Promise<any>;
+  // blacklistToken: (token: string, tokenType: string) => Promise<any>;
+  blacklistToken: (query: any) => Promise<any>;
 }

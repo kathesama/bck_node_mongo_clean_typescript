@@ -12,18 +12,18 @@ import { GenericError } from '../interfaces/http/errors';
 import { isEqual, isNil } from 'lodash';
 import { TokenModel } from '../domain/models/Token.model';
 
-/**
- * Delete auth tokens
- * @param {Object} query with user, type and fingerprint (optional)
- * @returns {Promise<Object>}
- */
-const deleteUserTokens = async (query = {}) => {
-  try {
-    await TokenService.deleteMany(query);
-  } catch (error) {
-    return badRequestHelper(error, ReasonPhrases.INTERNAL_SERVER_ERROR, StatusCodes.INTERNAL_SERVER_ERROR);
-  }
-};
+// /**
+//  * Delete auth tokens
+//  * @param {Object} query with user, type and fingerprint (optional)
+//  * @returns {Promise<Object>}
+//  */
+// const deleteUserTokens = async (query = {}) => {
+//   try {
+//     await TokenService.deleteMany(query);
+//   } catch (error) {
+//     return badRequestHelper(error, ReasonPhrases.INTERNAL_SERVER_ERROR, StatusCodes.INTERNAL_SERVER_ERROR);
+//   }
+// };
 
 /**
  * Generate token
@@ -97,7 +97,7 @@ const loadToken = async (userId: string, fingerprint: string, type: string, blac
 };
 
 const performDeleteUserToken = async (query: any): Promise<boolean> => {
-  const responseObj = await deleteUserTokens(query).then(() => {
+  const responseObj = await TokenService.blacklistToken(query).then(() => {
     return true;
   });
 
@@ -189,7 +189,6 @@ export const handleTokens = async (user: any, fingerprint: string, option: strin
 
       // now we've to check that must not exists more than one R.T. with the same fingerprint, if it return the same one (always as be a valid token)
       if (!(await checkAllValidTokens(0, queries.RefreshTokenByFingerprint, messages['totalByFingerprintReached'], deletePreviousTokens))) {
-        // TODO: get actual token for this fingerprint and return it
         tokenArray['refresh'] = await getActualToken(user, fingerprint, tokenTypes.REFRESH);
       } else {
         // once we've chech the refresh tokens we've to create a new one
@@ -213,8 +212,8 @@ export const handleTokens = async (user: any, fingerprint: string, option: strin
       performDeleteUserToken(queries.ALLTotalTokensByUserAndFingerprint);
 
       // once we've check the access tokens we've to create a new one
-      tokenArray['access'] = '';
-      tokenArray['refresh'] = '';
+      tokenArray['access'] = 'logged out';
+      tokenArray['refresh'] = 'logged out';
       break;
   }
 

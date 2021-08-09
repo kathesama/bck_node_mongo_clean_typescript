@@ -65,7 +65,7 @@ export class GetVerifyMailUser implements ControllerInterface {
 
       const user: any = await this.getUser.findOneAndActivate(tokenDoc._doc.user.toString());
 
-      await this.handleToken.blacklistToken(tokenDoc._doc._id.toString(), tokenTypes.VERIFY_EMAIL);
+      await this.handleToken.blacklistToken({ _id: tokenDoc._doc._id.toString(), type: tokenTypes.VERIFY_EMAIL });
 
       return successHelper(user);
     } catch (error) {
