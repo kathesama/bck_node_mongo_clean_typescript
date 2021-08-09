@@ -80,10 +80,10 @@ const updateUser = {
         .optional(),
     })
     .min(1),
-    options: {
-      cache: false,
-      allowUnknown: true,
-    },
+  options: {
+    cache: false,
+    allowUnknown: true,
+  },
 };
 
 const deleteUser = {
@@ -133,7 +133,7 @@ const verifyUserEmail = {
     'accept-language': Joi.required().custom(acceptedLanguage),
   }),
   query: Joi.object().keys({
-    key: Joi.string().required()
+    key: Joi.string().required(),
   }),
   options: {
     cache: false,
@@ -141,4 +141,17 @@ const verifyUserEmail = {
   },
 };
 
-export { createUser, getUsers, getUser, updateUser, deleteUser, loginUser, reauthenticateUser, verifyUserEmail };
+const logoutUser = {
+  headers: Joi.object().keys({
+    'accept-language': Joi.required().custom(acceptedLanguage),
+  }),
+  body: Joi.object().keys({
+    deletePreviousTokens: Joi.boolean().default(false).optional(),
+  }),
+  options: {
+    cache: false,
+    allowUnknown: true,
+  },
+};
+
+export { createUser, getUsers, getUser, updateUser, deleteUser, loginUser, reauthenticateUser, verifyUserEmail, logoutUser };

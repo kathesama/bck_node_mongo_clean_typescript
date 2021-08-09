@@ -5,8 +5,8 @@ import { HttpRequest, HttpResponse } from '../../interfaces/http.interface';
 import { logger } from '../../main/config';
 
 import { GetUserInterface, GetOneUserInterface, GetOneUserAndUpdateInterface } from '../../interfaces/useCaseDTO/User.interfaces';
-import TokenService from '../../domain/services/token.service';
 import { tokenTypes } from '../../domain/enums/token.enum';
+import { handleVerifyTokenInterface, handleBlacklistTokenInterface } from '../../interfaces/useCaseDTO/Token.interfaces';
 
 export class GetAllUser implements ControllerInterface {
   constructor(private readonly getUser: GetUserInterface) {
@@ -49,21 +49,23 @@ export class GetOneUser implements ControllerInterface {
 }
 
 export class GetVerifyMailUser implements ControllerInterface {
-  tokenService = TokenService;
-
-  constructor(private readonly getUser: GetOneUserAndUpdateInterface) {
+  constructor(
+    private readonly getUser: GetOneUserAndUpdateInterface,
+    private readonly handleToken: handleVerifyTokenInterface & handleBlacklistTokenInterface
+  ) {
     this.getUser = getUser;
+    this.handleToken = handleToken;
   }
 
   async handle(httpRequest: HttpRequest): Promise<HttpResponse> {
     try {
       const { key } = httpRequest.query;
 
-      const tokenDoc = await this.tokenService.verifyToken(key, tokenTypes.VERIFY_EMAIL, httpRequest.fingerprint.hash);
+      const tokenDoc = await this.handleToken.verifyToken(key, tokenTypes.VERIFY_EMAIL, httpRequest.fingerprint.hash);
 
       const user: any = await this.getUser.findOneAndActivate(tokenDoc._doc.user.toString());
 
-      await this.tokenService.blacklistToken(tokenDoc._doc._id.toString());
+      await this.handleToken.blacklistToken(tokenDoc._doc._id.toString(), tokenTypes.VERIFY_EMAIL);
 
       return successHelper(user);
     } catch (error) {

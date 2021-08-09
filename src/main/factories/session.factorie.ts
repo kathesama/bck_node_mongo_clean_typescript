@@ -3,22 +3,11 @@ import { HandleTokenUseCaseDB } from '../../data/backEndUseCases/handleTokens.db
 
 import { GetLoginToken } from '../../controllers/token/GetLoginToken.controller';
 import { GetReauthenticationToken } from '../../controllers/token/GetReauthToken.controller';
-// import { JwtAdapter } from '../adapters/jwt.adapter';
-// import { PatchTokenFactorie } from '../../controllers/token/PatchToken.controller';
-// import { DeleteTokenFactorie } from '../../controllers/token/DeleteToken.controller';
 import { DcryptAdapter } from '../adapters/bcrypt.adapter';
+import { GetLogoutToken } from '../../controllers/token/GetLogoutToken.controller';
 
 // inyeccion de dependencias
-// export const makeGetAllTokenFactorie = (): GetAllToken => {
-//   const handleTokenDB = new HandleTokenUseCaseDB();
-
-//   const handledTokenRegister = new GetAllToken(handleTokenDB);
-
-//   return handledTokenRegister;
-// };
-
 export const makeLoginFactorie = (): GetLoginToken => {
-  // const jwtAdapter = new JwtAdapter(process.env.SEED, process.env.EXPIRES_IN);
   const dcryptAdapter = new DcryptAdapter();
   const handleTokenDB = new HandleTokenUseCaseDB();
 
@@ -27,36 +16,18 @@ export const makeLoginFactorie = (): GetLoginToken => {
   return handledTokenRegister;
 };
 
-export const makeReauthenticationFactorie = (): GetReauthenticationToken => {
-  // const jwtAdapter = new JwtAdapter(process.env.SEED, process.env.EXPIRES_IN);
-  const dcryptAdapter = new DcryptAdapter();
+export const makeLogoutFactorie = (): GetLogoutToken => {
   const handleTokenDB = new HandleTokenUseCaseDB();
 
-  const handledTokenRegister = new GetReauthenticationToken(handleTokenDB, dcryptAdapter);
+  const handledTokenRegister = new GetLogoutToken(handleTokenDB);
 
   return handledTokenRegister;
 };
 
-// export const makeRegisterTokenFactorie = (): RegisterTokenFactorie => {
-//   const handleTokenDB = new HandleTokenUseCaseDB();
+export const makeReauthenticationFactorie = (): GetReauthenticationToken => {
+  const handleTokenDB = new HandleTokenUseCaseDB();
 
-//   const handledTokenRegister = new RegisterTokenFactorie(handleTokenDB);
+  const handledTokenRegister = new GetReauthenticationToken(handleTokenDB);
 
-//   return handledTokenRegister;
-// };
-
-// export const makeUpdateTokenFactorie = (): PatchTokenFactorie => {
-//   const handleTokenDB = new HandleTokenUseCaseDB();
-
-//   const handledTokenRegister = new PatchTokenFactorie(handleTokenDB);
-
-//   return handledTokenRegister;
-// };
-
-// export const makeDeleteTokenFactorie = (): DeleteTokenFactorie => {
-//   const handleTokenDB = new HandleTokenUseCaseDB();
-
-//   const handledTokenRegister = new DeleteTokenFactorie(handleTokenDB);
-
-//   return handledTokenRegister;
-// };
+  return handledTokenRegister;
+};

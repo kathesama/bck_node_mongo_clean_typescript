@@ -6,7 +6,7 @@ import { ReasonPhrases, StatusCodes } from 'http-status-codes';
 import { logger } from '../config';
 import { HttpRequest } from '../../interfaces/http.interface';
 import { checkAutorizationHeader, checkLanguageHeader, clientRequestHelper } from '../../helpers/http.helper';
-import tokenService from '../../domain/services/token.service';
+import { verifyToken } from '../../helpers/token.helper';
 import { GenericError } from '../../interfaces/http/errors';
 import { validateUser } from './user.validation';
 
@@ -21,7 +21,7 @@ export const authorize =
 
       const fingerprint = req.fingerprint.hash;
 
-      const tokenInfo = await tokenService.verifyToken(token, tokenType, fingerprint);
+      const tokenInfo = await verifyToken(token, tokenType, fingerprint);
 
       const user = await validateUser(tokenInfo.user, requiredRoles);
 

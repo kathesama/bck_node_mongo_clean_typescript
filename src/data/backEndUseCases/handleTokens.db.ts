@@ -1,20 +1,40 @@
+import { tokenTypes } from '../../domain/enums/token.enum';
 import { TokenModel } from '../../domain/models/Token.model';
 import TokenService from '../../domain/services/token.service';
+import * as TokenHelper from '../../helpers/token.helper';
 import {
-  // AddTokenInterface,
-  // DeleteTokenInterface,
-  // GetOneTokenInterface,
+  findOneAndUpdateTokenInterface,
+  DeleteTokenInterface,
+  GetOneTokenInterface,
   GetTokenInterface,
   ITokenModelInterface,
-  // PatchTokenInterface,
+  createTokenInterface,
+  CountDocumentTokenInterface,
+  handleTokensInterface,
+  handleVerifyEmailTokensInterface,
+  handleVerifyTokenInterface,
+  handleBlacklistTokenInterface,
 } from '../../interfaces/useCaseDTO/Token.interfaces';
 
-// implements GetTokenInterface, GetOneTokenInterface, AddTokenInterface, PatchTokenInterface, DeleteTokenInterface
-export class HandleTokenUseCaseDB implements GetTokenInterface {
+export class HandleTokenUseCaseDB
+  implements
+    GetTokenInterface,
+    createTokenInterface,
+    DeleteTokenInterface,
+    GetOneTokenInterface,
+    CountDocumentTokenInterface,
+    findOneAndUpdateTokenInterface,
+    handleTokensInterface,
+    handleVerifyEmailTokensInterface,
+    handleVerifyTokenInterface,
+    handleBlacklistTokenInterface
+{
   tokenService: any;
+  tokenHelper: any;
 
   constructor() {
     this.tokenService = TokenService;
+    this.tokenHelper = TokenHelper;
   }
 
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
@@ -24,26 +44,61 @@ export class HandleTokenUseCaseDB implements GetTokenInterface {
     return new Promise((resolve) => resolve(tokenDB));
   }
 
-  async getOne(token: string): Promise<ITokenModelInterface> {
-    const tokenDB: any = await this.tokenService.getById(token);
+  async create(token: TokenModel): Promise<ITokenModelInterface> {
+    const tokenDB: any = await this.tokenService.create(token);
 
     return new Promise((resolve) => resolve(tokenDB));
   }
 
-  async add(token: TokenModel): Promise<ITokenModelInterface> {
-    const tokenDB: any = await this.tokenService.add(token);
+  async deleteMany(id: string): Promise<ITokenModelInterface> {
+    const tokenDB: any = await this.tokenService.deleteMany(id);
 
     return new Promise((resolve) => resolve(tokenDB));
   }
 
-  async patch(id: string, token: TokenModel): Promise<ITokenModelInterface> {
-    const tokenDB: any = await this.tokenService.patch(id, token);
+  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+  async findOne(token: any): Promise<ITokenModelInterface> {
+    const tokenDB: any = await this.tokenService.findOne(token);
 
     return new Promise((resolve) => resolve(tokenDB));
   }
 
-  async delete(id: string): Promise<ITokenModelInterface> {
-    const tokenDB: any = await this.tokenService.delete(id);
+  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+  async countDocuments(query: any): Promise<ITokenModelInterface> {
+    const tokenDB: any = await this.tokenService.countDocuments(query);
+
+    return new Promise((resolve) => resolve(tokenDB));
+  }
+
+  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+  async findOneAndUpdate(query: any, update: any): Promise<ITokenModelInterface> {
+    const tokenDB: any = await this.tokenService.findOneAndUpdate(query, update);
+
+    return new Promise((resolve) => resolve(tokenDB));
+  }
+
+  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+  async handleTokens(user: any, fingerprint: string, option: string, deletePreviousTokens = false): Promise<ITokenModelInterface> {
+    const tokenDB: any = await this.tokenHelper.handleTokens(user, fingerprint, option, deletePreviousTokens);
+
+    return new Promise((resolve) => resolve(tokenDB));
+  }
+
+  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+  async generateVerifyEmailToken(user: any, fingerprint: string): Promise<string> {
+    const tokenDB: any = await this.tokenHelper.generateVerifyEmailToken(user, fingerprint);
+
+    return new Promise((resolve) => resolve(tokenDB));
+  }
+
+  async verifyToken(token: string, type: string, fingerprint: string): Promise<string> {
+    const tokenDB: any = await this.tokenHelper.verifyToken(token, type, fingerprint);
+
+    return new Promise((resolve) => resolve(tokenDB));
+  }
+
+  async blacklistToken(token: string, tokenType = tokenTypes.VERIFY_EMAIL): Promise<string> {
+    const tokenDB: any = await this.tokenService.blacklistToken(token, tokenType);
 
     return new Promise((resolve) => resolve(tokenDB));
   }

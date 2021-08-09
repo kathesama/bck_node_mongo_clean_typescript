@@ -7,16 +7,21 @@ import { AddUserInterface } from '../../interfaces/useCaseDTO/User.interfaces';
 import { logger } from '../../main/config';
 import { Cryptography } from '../../interfaces/encryptor.interface';
 import { UserModel } from '../../domain/models/User.model';
-import TokenService from '../../domain/services/token.service';
 import { sendVerificationEmail } from '../../helpers/email.helper';
-// import { UserModel } from '../../domain/models/User.model';
+import { handleVerifyEmailTokensInterface } from '../../interfaces/useCaseDTO/Token.interfaces';
 
 export class RegisterUserFactorie implements ControllerInterface {
-  tokenService = TokenService;
+  // tokenService = TokenService;
 
   // eslint-disable-next-line no-unused-vars
-  constructor(private readonly addUser: AddUserInterface, private readonly dcrypt: Cryptography) {
+  constructor(
+    private readonly addUser: AddUserInterface,
+    private readonly dcrypt: Cryptography,
+    private readonly handleToken: handleVerifyEmailTokensInterface
+  ) {
     this.addUser = addUser;
+    this.dcrypt = dcrypt;
+    this.handleToken = handleToken;
   }
 
   async handle(httpRequest: HttpRequest): Promise<HttpResponse> {
@@ -36,7 +41,7 @@ export class RegisterUserFactorie implements ControllerInterface {
 
       const userAdded: any = await this.addUser.add(new UserModel(email, crypPassword, firstName, lastName, age, image, role, isActive));
 
-      const confirmToken = await this.tokenService.generateVerifyEmailToken(userAdded.id, httpRequest.fingerprint.hash);
+      const confirmToken = await this.handleToken.generateVerifyEmailToken(userAdded.id, httpRequest.fingerprint.hash);
 
       await sendVerificationEmail(email, confirmToken);
 

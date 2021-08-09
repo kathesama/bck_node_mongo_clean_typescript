@@ -5,6 +5,7 @@ import { GetAllUser, GetOneUser, GetVerifyMailUser } from '../../controllers/use
 import { PatchUserFactorie } from '../../controllers/user/PatchUser.controller';
 import { DeleteUserFactorie } from '../../controllers/user/DeleteUser.controller';
 import { BcryptAdapter } from '../adapters/bcrypt.adapter';
+import { HandleTokenUseCaseDB } from '../../data/backEndUseCases/handleTokens.db';
 
 // inyeccion de dependencias
 export const makeGetAllUserFactorie = (): GetAllUser => {
@@ -26,8 +27,9 @@ export const makeGetOneUserFactorie = (): GetOneUser => {
 export const makeRegisterUserFactorie = (): RegisterUserFactorie => {
   const handleUserDB = new HandleUserUseCaseDB();
   const dcryptAdapter = new BcryptAdapter();
+  const handleTokenDB = new HandleTokenUseCaseDB();
 
-  const handledUserRegister = new RegisterUserFactorie(handleUserDB, dcryptAdapter);
+  const handledUserRegister = new RegisterUserFactorie(handleUserDB, dcryptAdapter, handleTokenDB);
 
   return handledUserRegister;
 };
@@ -50,8 +52,9 @@ export const makeDeleteUserFactorie = (): DeleteUserFactorie => {
 
 export const makeVerifyUserEmailFactorie = (): GetVerifyMailUser => {
   const handleUserDB = new HandleUserUseCaseDB();
+  const handleTokenDB = new HandleTokenUseCaseDB();
 
-  const handledUserRegister = new GetVerifyMailUser(handleUserDB);
+  const handledUserRegister = new GetVerifyMailUser(handleUserDB, handleTokenDB);
 
   return handledUserRegister;
 };

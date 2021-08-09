@@ -16,24 +16,48 @@ export interface GetTokenInterface {
   // eslint-disable-next-line no-unused-vars
   get: (props: Record<string, unknown>) => Promise<ITokenModelInterface>;
 }
-/*
+
 export interface GetOneTokenInterface {
   // eslint-disable-next-line no-unused-vars
-  getOne: (id: string) => Promise<ITokenModelInterface>;
+  findOne: (token: any) => Promise<ITokenModelInterface>;
 }
 
-export interface AddTokenInterface {
+export interface createTokenInterface {
   // eslint-disable-next-line no-unused-vars
-  add: (token: TokenModel) => Promise<ITokenModelInterface>;
-}
-
-export interface PatchTokenInterface {
-  // eslint-disable-next-line no-unused-vars
-  patch: (id: string, token: TokenModel) => Promise<ITokenModelInterface>;
+  create: (token: TokenModel) => Promise<ITokenModelInterface>;
 }
 
 export interface DeleteTokenInterface {
   // eslint-disable-next-line no-unused-vars
-  delete: (id: string) => Promise<ITokenModelInterface>;
+  deleteMany: (query: any) => Promise<ITokenModelInterface>;
 }
-*/
+
+export interface CountDocumentTokenInterface {
+  // eslint-disable-next-line no-unused-vars
+  countDocuments: (query: any) => Promise<ITokenModelInterface>;
+}
+
+export interface findOneAndUpdateTokenInterface {
+  // eslint-disable-next-line no-unused-vars
+  findOneAndUpdate: (query: any, update: any) => Promise<ITokenModelInterface>;
+}
+
+export interface handleTokensInterface {
+  // eslint-disable-next-line no-unused-vars
+  handleTokens: (user: any, fingerprint: string, option: string, deletePreviousTokens: boolean) => Promise<ITokenModelInterface>;
+}
+
+export interface handleVerifyEmailTokensInterface {
+  // eslint-disable-next-line no-unused-vars
+  generateVerifyEmailToken: (user: any, fingerprint: string) => Promise<string>;
+}
+
+export interface handleVerifyTokenInterface {
+  // eslint-disable-next-line no-unused-vars
+  verifyToken: (token: string, type: string, fingerprint: string) => Promise<any>;
+}
+
+export interface handleBlacklistTokenInterface {
+  // eslint-disable-next-line no-unused-vars
+  blacklistToken: (token: string, tokenType: string) => Promise<any>;
+}
