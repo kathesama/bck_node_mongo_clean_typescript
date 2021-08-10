@@ -49,7 +49,7 @@ export interface handleTokensInterface {
 
 export interface handleVerifyEmailTokensInterface {
   // eslint-disable-next-line no-unused-vars
-  generateVerifyEmailToken: (user: any, fingerprint: string) => Promise<string>;
+  generateMailedToken: (user: any, fingerprint: string, type: string) => Promise<string>;
 }
 
 export interface handleVerifyTokenInterface {
@@ -59,6 +59,5 @@ export interface handleVerifyTokenInterface {
 
 export interface handleBlacklistTokenInterface {
   // eslint-disable-next-line no-unused-vars
-  // blacklistToken: (token: string, tokenType: string) => Promise<any>;
   blacklistToken: (query: any) => Promise<any>;
 }

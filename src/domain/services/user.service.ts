@@ -17,7 +17,7 @@ class UserService {
     const query = {
       $and: [{ _id: id }, { isActive: true }],
     };
-    const one: any = UserRepository.find(query);
+    const one: any = UserRepository.findOne(query);
     return one;
   }
 

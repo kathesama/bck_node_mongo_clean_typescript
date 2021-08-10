@@ -1,7 +1,8 @@
 /* eslint-disable prettier/prettier */
 import Joi from 'joi';
 import { rolesTypes } from '../../domain/enums/roles.enum';
-import { password, objectId, acceptedLanguage } from './customRequestParams.validation';
+// eslint-disable-next-line no-unused-vars
+import { password, objectId, acceptedLanguage, isValidResetToken } from './customRequestParams.validation';
 
 const createUser = {
   headers: Joi.object().keys({
@@ -154,4 +155,47 @@ const logoutUser = {
   },
 };
 
-export { createUser, getUsers, getUser, updateUser, deleteUser, loginUser, reauthenticateUser, verifyUserEmail, logoutUser };
+const requestResetUserPassword = {
+  headers: Joi.object().keys({
+    'accept-language': Joi.required().custom(acceptedLanguage),
+  }),
+  body: Joi.object()
+    .keys({
+      email: Joi.string().required().email(),
+    }),
+  options: {
+    cache: false,
+    allowUnknown: true,
+  },
+};
+
+const runResetUserPassword = {
+  headers: Joi.object().keys({
+    'accept-language': Joi.required().custom(acceptedLanguage),
+  }),
+  params: Joi.object().keys({
+    key: Joi.string().required(),
+  }),
+  body: Joi.object()
+    .keys({
+      password: Joi.string().custom(password).optional(),
+    }),
+  options: {
+    cache: false,
+    allowUnknown: true,
+  },
+};
+
+export {
+  createUser,
+  getUsers,
+  getUser,
+  updateUser,
+  deleteUser,
+  loginUser,
+  reauthenticateUser,
+  verifyUserEmail,
+  logoutUser,
+  requestResetUserPassword,
+  runResetUserPassword
+};

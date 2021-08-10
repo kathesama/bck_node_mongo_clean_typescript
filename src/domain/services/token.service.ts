@@ -18,11 +18,6 @@ class TokenService {
 
   // public blacklistToken = async (token: string, tokenType: string): Promise<any> => {
   public blacklistToken = async (query: any): Promise<any> => {
-    // const query = {
-    //   _id: token,
-    //   type: tokenType,
-    // };
-
     const update = {
       $set: { blacklisted: true },
     };

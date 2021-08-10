@@ -4,6 +4,7 @@ import {
   AddUserInterface,
   DeleteUserInterface,
   GetOneUserAndUpdateInterface,
+  GetOneUserByEmailInterface,
   GetOneUserInterface,
   GetUserInterface,
   IUserModelInterface,
@@ -11,7 +12,14 @@ import {
 } from '../../interfaces/useCaseDTO/User.interfaces';
 
 export class HandleUserUseCaseDB
-  implements GetUserInterface, GetOneUserInterface, AddUserInterface, PatchUserInterface, DeleteUserInterface, GetOneUserAndUpdateInterface
+  implements
+    GetUserInterface,
+    GetOneUserInterface,
+    AddUserInterface,
+    PatchUserInterface,
+    DeleteUserInterface,
+    GetOneUserAndUpdateInterface,
+    GetOneUserByEmailInterface
 {
   userService: any;
 
@@ -22,6 +30,12 @@ export class HandleUserUseCaseDB
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   async get(props: Record<string, unknown>): Promise<IUserModelInterface> {
     const userDB: any = await this.userService.get(props);
+
+    return new Promise((resolve) => resolve(userDB));
+  }
+
+  async getOneByEmail(email: string): Promise<IUserModelInterface> {
+    const userDB: any = await this.userService.getByEmail(email);
 
     return new Promise((resolve) => resolve(userDB));
   }

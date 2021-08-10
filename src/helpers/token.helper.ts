@@ -9,21 +9,8 @@ import TokenService from '../domain/services/token.service';
 
 import { tokenTypes } from '../domain/enums/token.enum';
 import { GenericError } from '../interfaces/http/errors';
-import { isEqual, isNil } from 'lodash';
+import { isNil } from 'lodash';
 import { TokenModel } from '../domain/models/Token.model';
-
-// /**
-//  * Delete auth tokens
-//  * @param {Object} query with user, type and fingerprint (optional)
-//  * @returns {Promise<Object>}
-//  */
-// const deleteUserTokens = async (query = {}) => {
-//   try {
-//     await TokenService.deleteMany(query);
-//   } catch (error) {
-//     return badRequestHelper(error, ReasonPhrases.INTERNAL_SERVER_ERROR, StatusCodes.INTERNAL_SERVER_ERROR);
-//   }
-// };
 
 /**
  * Generate token
@@ -60,7 +47,7 @@ const saveToken = async (token: string, userId: string, fingerprint: string, exp
       fingerprint,
       userId,
       type,
-      expires.toDate(),
+      expires,
       blacklisted
     );
 
@@ -123,10 +110,26 @@ const checkAllValidTokens = async (max: number, query: any, message: string, res
   return resultObj;
 };
 
-const generateNewToken = async (user: string, fingerprint: string, tokenType: string): Promise<any> => {
-  const newTokenExpires = isEqual(tokenType, tokenTypes.REFRESH)
-    ? moment().add(environmentConfig().jwtConfig.refreshExpirationDays, 'days')
-    : moment().add(environmentConfig().jwtConfig.accessExpirationMinutes, 'minutes');
+const  generateNewTokenByType = async (user: string, fingerprint: string, tokenType: string): Promise<any> => {
+  let newTokenExpires: any;
+  let convert= true;
+
+  switch (tokenType) {
+    case tokenTypes.REFRESH:
+        newTokenExpires = moment().add(environmentConfig().jwtConfig.refreshExpirationDays, 'days');
+      break;
+    case tokenTypes.ACCESS:
+        newTokenExpires = moment().add(environmentConfig().jwtConfig.accessExpirationMinutes, 'minutes');
+      break;
+    case tokenTypes.RESET_PASSWORD:
+        newTokenExpires = moment().add(environmentConfig().jwtConfig.resetPasswordExpirationMinutes, 'minutes');
+        convert = false;
+      break;
+    case tokenTypes.VERIFY_EMAIL:
+        newTokenExpires = moment().add(environmentConfig().jwtConfig.verifyEmailExpirationMinutes, 'minutes');
+        convert = false;
+      break;
+  }
 
   const newToken = getTypedToken(user, newTokenExpires, tokenType);
 
@@ -134,7 +137,7 @@ const generateNewToken = async (user: string, fingerprint: string, tokenType: st
 
   return {
     token: newToken,
-    expires: newTokenExpires.utc(true).toDate(),
+    expires: convert? newTokenExpires.utc(true).toDate() : newTokenExpires,
   };
 };
 
@@ -192,11 +195,11 @@ export const handleTokens = async (user: any, fingerprint: string, option: strin
         tokenArray['refresh'] = await getActualToken(user, fingerprint, tokenTypes.REFRESH);
       } else {
         // once we've chech the refresh tokens we've to create a new one
-        tokenArray['refresh'] = await generateNewToken(user, fingerprint, tokenTypes.REFRESH);
+        tokenArray['refresh'] = await  generateNewTokenByType(user, fingerprint, tokenTypes.REFRESH);
       }
 
       // once we've check the access tokens we've to create a new one
-      tokenArray['access'] = await generateNewToken(user, fingerprint, tokenTypes.ACCESS);
+      tokenArray['access'] = await  generateNewTokenByType(user, fingerprint, tokenTypes.ACCESS);
       break;
     case 'reauthenticate':
       // now we've to check that must not exists more than one A.T. with the same fingerprint
@@ -205,7 +208,7 @@ export const handleTokens = async (user: any, fingerprint: string, option: strin
       }
 
       // once we've check the access tokens we've to create a new one
-      tokenArray['access'] = await generateNewToken(user, fingerprint, tokenTypes.ACCESS);
+      tokenArray['access'] = await  generateNewTokenByType(user, fingerprint, tokenTypes.ACCESS);
       break;
     case 'logout':
       // now we've to check that must not exists more than one A.T. with the same fingerprint
@@ -226,13 +229,21 @@ export const handleTokens = async (user: any, fingerprint: string, option: strin
  * @returns {Promise<string>}
  */
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-export const generateVerifyEmailToken = async (user: any, fingerprint: string): Promise<string> => {
-  const expires = moment().add(environmentConfig().jwtConfig.verifyEmailExpirationMinutes, 'minutes');
-  const verifyEmailToken = getTypedToken(user, expires, tokenTypes.VERIFY_EMAIL);
+export const generateMailedToken = async (user: any, fingerprint: string, type: string): Promise<string> => {
+  try {
+    const tokenArray = await generateNewTokenByType(user, fingerprint, type);
 
-  await saveToken(verifyEmailToken, user, fingerprint, expires, tokenTypes.VERIFY_EMAIL);
-  return verifyEmailToken;
+  // const expires = moment().add(environmentConfig().jwtConfig.verifyEmailExpirationMinutes, 'minutes');
+  // const verifyEmailToken = getTypedToken(user, expires, tokenTypes.VERIFY_EMAIL);
+  // await saveToken(tokenArray['token'], user, fingerprint, tokenArray['expires'], type);
+
+  return tokenArray['token'];
+  } catch (error) {
+    throw new GenericError(error.message, StatusCodes.INTERNAL_SERVER_ERROR, ReasonPhrases.INTERNAL_SERVER_ERROR);
+  }
 };
+
+
 
 /**
  * Verify token and return token doc (or throw an error if it is not valid)
@@ -242,7 +253,9 @@ export const generateVerifyEmailToken = async (user: any, fingerprint: string): 
  */
 export const verifyToken = async (token: string, type: string, fingerprint: string): Promise<any> => {
   try {
-    const payload = jwt.verify(token, environmentConfig().jwtConfig.SECRET, (err, decoded) => {
+    const secret = environmentConfig().jwtConfig.SECRET;
+
+    const payload = jwt.verify(token, secret, (err, decoded) => {
       if (err) {
         throw new GenericError('Invalid token', StatusCodes.UNAUTHORIZED, ReasonPhrases.UNAUTHORIZED);
       }

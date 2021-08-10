@@ -21,7 +21,7 @@ export const environmentConfig = (): any => {
       MONGO_URL: Joi.string().default('').description('Mongo DB url').required(),
       // eslint-disable-next-line quotes
       DB_NAME: Joi.string().default(`prueba`).description('Mongo DB name'),
-      JWT_SECRET: Joi.string().default('').description('JWT secret key').required(),
+      JWT_SECRET: Joi.string().default('').description('JWT secret key'),
       JWT_ACCESS_EXPIRATION_MINUTES: Joi.string().default('30m').description('minutes after which access tokens expire'),
       JWT_REFRESH_EXPIRATION_DAYS: Joi.string().default('d').description('days after which refresh tokens expire'),
       JWT_RESET_PASSWORD_EXPIRATION_MINUTES: Joi.string().default('m').description('minutes after which reset password token expires'),

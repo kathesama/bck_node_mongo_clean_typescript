@@ -24,6 +24,11 @@ export interface GetOneUserInterface {
   getOne: (id: string) => Promise<IUserModelInterface>;
 }
 
+export interface GetOneUserByEmailInterface {
+  // eslint-disable-next-line no-unused-vars
+  getOneByEmail: (email: string) => Promise<IUserModelInterface>;
+}
+
 export interface GetOneUserAndUpdateInterface {
   // eslint-disable-next-line no-unused-vars
   findOneAndActivate: (id: string) => Promise<IUserModelInterface>;

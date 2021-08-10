@@ -1,4 +1,3 @@
-import { tokenTypes } from '../../domain/enums/token.enum';
 import { TokenModel } from '../../domain/models/Token.model';
 import TokenService from '../../domain/services/token.service';
 import * as TokenHelper from '../../helpers/token.helper';
@@ -85,8 +84,8 @@ export class HandleTokenUseCaseDB
   }
 
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-  async generateVerifyEmailToken(user: any, fingerprint: string): Promise<string> {
-    const tokenDB: any = await this.tokenHelper.generateVerifyEmailToken(user, fingerprint);
+  async generateMailedToken(user: any, fingerprint: string, type: string): Promise<string> {
+    const tokenDB: any = await this.tokenHelper.generateMailedToken(user, fingerprint, type);
 
     return new Promise((resolve) => resolve(tokenDB));
   }
@@ -97,8 +96,9 @@ export class HandleTokenUseCaseDB
     return new Promise((resolve) => resolve(tokenDB));
   }
 
-  async blacklistToken(token: string, tokenType = tokenTypes.VERIFY_EMAIL): Promise<string> {
-    const tokenDB: any = await this.tokenService.blacklistToken(token, tokenType);
+  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+  async blacklistToken(query: any): Promise<string> {
+    const tokenDB: any = await this.tokenService.blacklistToken(query);
 
     return new Promise((resolve) => resolve(tokenDB));
   }

@@ -19,7 +19,7 @@ export const validateUser = async (uuid: string, requiredRoles: any[]): Promise<
       throw new GenericError('A valid user is required to perform this action', StatusCodes.UNAUTHORIZED, ReasonPhrases.UNAUTHORIZED);
     } else {
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const isValidRole = validateRoles(user[0], requiredRoles);
+      const isValidRole = validateRoles(user, requiredRoles);
       if (isValidRole) {
         return user;
       } else {

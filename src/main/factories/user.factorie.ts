@@ -1,8 +1,8 @@
 import { HandleUserUseCaseDB } from '../../data/backEndUseCases/handleUsers.db';
-import { RegisterUserFactorie } from '../../controllers/user/PostUser.controller';
+import { MakeResetPasswordFactorie, RegisterUserFactorie } from '../../controllers/user/PostUser.controller';
 
 import { GetAllUser, GetOneUser, GetVerifyMailUser } from '../../controllers/user/GetUser.controller';
-import { PatchUserFactorie } from '../../controllers/user/PatchUser.controller';
+import { PatchUserFactorie, RunResetPasswordFactorie } from '../../controllers/user/PatchUser.controller';
 import { DeleteUserFactorie } from '../../controllers/user/DeleteUser.controller';
 import { BcryptAdapter } from '../adapters/bcrypt.adapter';
 import { HandleTokenUseCaseDB } from '../../data/backEndUseCases/handleTokens.db';
@@ -55,6 +55,25 @@ export const makeVerifyUserEmailFactorie = (): GetVerifyMailUser => {
   const handleTokenDB = new HandleTokenUseCaseDB();
 
   const handledUserRegister = new GetVerifyMailUser(handleUserDB, handleTokenDB);
+
+  return handledUserRegister;
+};
+
+export const RunRequestResetPasswordFactorie = (): RunResetPasswordFactorie => {
+  const handleUserDB = new HandleUserUseCaseDB();
+  const handleTokenDB = new HandleTokenUseCaseDB();
+  const dcryptAdapter = new BcryptAdapter();
+
+  const handledUserRegister = new RunResetPasswordFactorie(handleUserDB, dcryptAdapter, handleTokenDB);
+
+  return handledUserRegister;
+};
+
+export const MakeRequestResetPasswordFactorie = (): MakeResetPasswordFactorie => {
+  const handleUserDB = new HandleUserUseCaseDB();
+  const handleTokenDB = new HandleTokenUseCaseDB();
+
+  const handledUserRegister = new MakeResetPasswordFactorie(handleUserDB, handleTokenDB);
 
   return handledUserRegister;
 };

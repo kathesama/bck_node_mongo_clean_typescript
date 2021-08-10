@@ -33,7 +33,7 @@ export const authorize =
         throw new GenericError('Token expired or invalid', StatusCodes.UNAUTHORIZED, ReasonPhrases.UNAUTHORIZED);
       }
 
-      req['user'] = user[0];
+      req['user'] = user;
 
       next();
     } catch (error) {

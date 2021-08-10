@@ -1,14 +1,17 @@
+import { StatusCodes, ReasonPhrases } from 'http-status-codes';
+
 import { ControllerInterface } from '../../interfaces/controller.interface';
 import { badRequestHelper, serverErrorHelper, successHelper } from '../../helpers/http.helper';
-// eslint-disable-next-line no-unused-vars
 import { HttpRequest, HttpResponse } from '../../interfaces/http.interface';
 
-import { AddUserInterface } from '../../interfaces/useCaseDTO/User.interfaces';
+import { AddUserInterface, GetOneUserByEmailInterface } from '../../interfaces/useCaseDTO/User.interfaces';
 import { logger } from '../../main/config';
 import { Cryptography } from '../../interfaces/encryptor.interface';
 import { UserModel } from '../../domain/models/User.model';
-import { sendVerificationEmail } from '../../helpers/email.helper';
+import { sendResetPasswordEmail, sendVerificationEmail } from '../../helpers/email.helper';
 import { handleVerifyEmailTokensInterface } from '../../interfaces/useCaseDTO/Token.interfaces';
+import { GenericError } from '../../interfaces/http/errors';
+import { tokenTypes } from '../../domain/enums/token.enum';
 
 export class RegisterUserFactorie implements ControllerInterface {
   // tokenService = TokenService;
@@ -41,11 +44,41 @@ export class RegisterUserFactorie implements ControllerInterface {
 
       const userAdded: any = await this.addUser.add(new UserModel(email, crypPassword, firstName, lastName, age, image, role, isActive));
 
-      const confirmToken = await this.handleToken.generateVerifyEmailToken(userAdded.id, httpRequest.fingerprint.hash);
+      const confirmToken = await this.handleToken.generateMailedToken(userAdded.id, httpRequest.fingerprint.hash, tokenTypes.VERIFY_EMAIL);
 
       await sendVerificationEmail(email, confirmToken);
 
       return successHelper(userAdded);
+    } catch (error) {
+      logger.error(error.message);
+      return serverErrorHelper(error);
+    }
+  }
+}
+
+export class MakeResetPasswordFactorie implements ControllerInterface {
+  // eslint-disable-next-line no-unused-vars
+  constructor(private readonly handleUser: GetOneUserByEmailInterface, private readonly handleToken: handleVerifyEmailTokensInterface) {
+    this.handleUser = handleUser;
+    this.handleToken = handleToken;
+  }
+
+  async handle(httpRequest: HttpRequest): Promise<HttpResponse> {
+    try {
+      const { email } = httpRequest.body;
+
+      const user: any = await this.handleUser.getOneByEmail(email);
+
+      if (!user || !user.isActive) {
+        throw new GenericError('Account is disabled or User was delete', StatusCodes.UNAUTHORIZED, ReasonPhrases.UNAUTHORIZED);
+      }
+
+      // Generate a Reset password token
+      const resetPasswordToken = await this.handleToken.generateMailedToken(user.id, httpRequest.fingerprint.hash, tokenTypes.RESET_PASSWORD);
+
+      await sendResetPasswordEmail(email, resetPasswordToken);
+
+      return successHelper(resetPasswordToken.length > 0 ? 'OK' : 'ERROR');
     } catch (error) {
       logger.error(error.message);
       return serverErrorHelper(error);

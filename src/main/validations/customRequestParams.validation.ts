@@ -1,9 +1,7 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-// import { StatusCodes, ReasonPhrases } from 'http-status-codes';
-// import { clientRequestHelper } from '../../helpers/http.helper';
-// import userRepository from '../../domain/repositories/user.repository';
-
 import { languageTypes } from '../../domain/enums/language.enum';
+import { tokenTypes } from '../../domain/enums/token.enum';
+import { verifyToken } from '../../helpers/token.helper';
 
 const objectId = (value: any, helpers: any) => {
   if (!value.match(/^[0-9a-fA-F]{24}$/)) {
@@ -30,4 +28,14 @@ const acceptedLanguage = (value: any, helpers: any) => {
   return value;
 };
 
-export { objectId, password, acceptedLanguage };
+const isValidResetToken = async (key: string, helpers: any) => {
+  const payload = await verifyToken(key, tokenTypes.RESET_PASSWORD, '');
+
+  if (!payload) {
+    return helpers.message('Invalid token');
+  }
+
+  return payload;
+};
+
+export { objectId, password, acceptedLanguage, isValidResetToken };

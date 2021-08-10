@@ -12,6 +12,8 @@ import {
   makeUpdateUserFactorie,
   makeDeleteUserFactorie,
   makeRegisterUserFactorie,
+  RunRequestResetPasswordFactorie,
+  MakeRequestResetPasswordFactorie,
 } from '../factories/user.factorie';
 
 export default (router: Router): void => {
@@ -36,4 +38,13 @@ export default (router: Router): void => {
     .post([authorize(tokenTypes.ACCESS, 'ADMIN_ROLE'), validateRequestParams(userValidation.createUser)], AdapterRoute(makeRegisterUserFactorie()));
 
   router.route('/verify-user/').get([validateRequestParams(userValidation.verifyUserEmail)], AdapterRoute(makeVerifyUserEmailFactorie()));
+
+  // TODO: implementar la logica en la factorie
+  router
+    .route('/reset-password/')
+    .post([validateRequestParams(userValidation.requestResetUserPassword)], AdapterRoute(MakeRequestResetPasswordFactorie()));
+
+  router
+    .route('/reset-password/:key')
+    .patch([validateRequestParams(userValidation.runResetUserPassword)], AdapterRoute(RunRequestResetPasswordFactorie()));
 };
