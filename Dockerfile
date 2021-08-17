@@ -40,4 +40,5 @@ COPY .env.prod ./.env
 
 # FINISHING
 EXPOSE 8051
+EXPOSE 443
 CMD node ./src/main/server/server.js

@@ -75,7 +75,7 @@ export const environmentConfig = (): any => {
 
   const mongooseConfig = {
     URL: envVars.MONGO_URL + (envVars.NODE_ENV === 'test' ? '-test' : ''),
-    IS_TLS: envVars.IS_TLS_MONGO,
+    IS_TLS_MONGO: envVars.IS_TLS_MONGO,
     CA_CERT: envVars.CA_CERT_MONGO,
     CA_TOKEN: envVars.CA_TOKEN_MONGO,
     KEY_CERT: envVars.KEY_CERT_MONGO,

@@ -1,7 +1,7 @@
 version: "3.7"
 services:
-  bck_tm_dam:
-    image: kathemica/bck_tm_dam:1.0.0
+  bck_node_mongo_clean:
+    image: kathemica/bck_node_mongo_clean:1.0.0
     hostname: node-backend
     container_name: node-backend
     restart: always
@@ -16,8 +16,12 @@ services:
       - MAIL_OWNER= NAME A MAIL_OWNER HERE
       - MAIL_USERNAME= SENDGRID USERNAME HERE
       - MAIL_FROM= SENDGRID MAIL FROM HERE
+      - IS_TLS_MONGO= Should I connect with mongodb as TLS?
+      - DB_NAME=INSERT YOUR DATABASE NAME HERE
+      - isHTTPS=Will I to connect with HTTPS?
     ports:
       - 8051:8051
+      - 443:443
     networks:
       - api_server_default
     command: node ./src/main/server/server.js

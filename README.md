@@ -130,7 +130,7 @@ Comandos útiles de Git.
 * Ver que archivos han cambiado: git status
 * Ver cuales son tus commits pendientes por subir: git log
 
-Generar certificados TLS, pasos:
+### Generar certificados TLS para cuando se habilite https, pasos:
 
 1. openssl genrsa -out server-key.pem 2048
 2. openssl req -new -sha256 -key server-key.pem -out server-csr.pem
@@ -158,6 +158,7 @@ With docker command:
 docker run -d \
 --name=nodeBckTPDam \
 -p 8051:8051 \
+-p 443:443 \
 --restart always \
 -e SERVER_FINGERKEY="SET YOUR RAMDON FINGERKEY HERE" \
 -e SENDGRID_API_KEY="SET YOUR API KEY HERE" \
@@ -166,9 +167,11 @@ docker run -d \
 -e MONGO_URL="INSERT YOUR MONGO_URL HERE" \
 -e MAIL_OWNER="NAME A MAIL_OWNER HERE" \
 -e MAIL_USERNAME="SENDGRID USERNAME HERE" \
--e MAIL_FROM="SENDGRID MAIL FROM HERE" \
+-e IS_TLS_MONGO= "Should I connect with mongodb as TLS" \
+-e DB_NAME= "INSERT YOUR DATABASE NAME HERE" \
+-e isHTTPS= "Will I to connect with HTTPS?" \
 -v $(pwd)/certs:/usr/app/certs \
-kathemica/bck_node_mongo_clean:1.0.0
+kathemica/bck_node_mongo_clean:1.0.1
 
 ```
 *$(pwd)*: is the actual path.
@@ -176,3 +179,31 @@ kathemica/bck_node_mongo_clean:1.0.0
 With docker compose
 
 > docker-compose -f .\<docker-compose-file>.yml up
+
+# Considerations
+
+## For secure http connection:
+
+You must provide certificates to the server in each path at folder:
+
+- KEY_PEM_HTTPS= './certs/https/server-key.pem'
+- CERT_PEM_HTTPS= './certs/https/server-cert.pem'
+
+Aditionally you must indicate in an environment variable to turn on https at docker:
+- isHTTPS=true
+
+This one enable connections at port 443
+
+## For secure TLS MongoDB connection:
+
+You must provide certificates to the server in each path at folder, those are from mongo and are related to that replicaset:
+
+- CA_CERT_MONGO= './certs/server_root_CA.crt'
+- KEY_CERT_MONGO= './certs/client.key'
+- PEM_CERT_MONGO= './certs/client.pem'
+
+Aditionally you must indicate in an environment variable to turn on https at docker:
+- IS_TLS_MONGO=true
+
+### **NOTE**:
+Only for connections with **atlas** you must enable *IS_TLS_MONGO=true*, with only that will work perfectly.
