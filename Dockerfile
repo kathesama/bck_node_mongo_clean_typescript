@@ -13,7 +13,7 @@ COPY package.json ./
 COPY tsoa.json ./
 COPY tsconfig.json ./
 COPY .babelrc ./
-COPY .eslintrc.json ./
+COPY .eslintrc ./
 COPY .eslintignore ./
 
 # INSTALLATION OF THE PACKAGE
@@ -28,7 +28,7 @@ RUN rm -rf ./src
 RUN rm tsoa.json
 RUN rm tsconfig.json
 RUN rm .babelrc
-RUN rm .eslintrc.json
+RUN rm .eslintrc
 RUN rm .eslintignore
 
 # SETTINGS FOR THE DOCKER CONTAINER

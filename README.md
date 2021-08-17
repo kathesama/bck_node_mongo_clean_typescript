@@ -147,7 +147,7 @@ Generar certificados TLS, pasos:
 > docker buildx create --name mybuilderconfig --use
 
 3. Build the image:
-> docker buildx build --platform linux/amd64,linux/arm64,linux/arm/v7 -f Dockerfile -t kathemica/bck_tm_dam:1.0.0 --push .
+> docker buildx build --platform linux/amd64,linux/arm64,linux/arm/v8 -f Dockerfile -t kathemica/bck_node_mongo_clean:1.0.0 --push .
 
 ---
 # Running container
