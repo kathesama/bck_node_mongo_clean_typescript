@@ -2,7 +2,7 @@ import App from '../config/app';
 import request from 'supertest';
 
 describe('Middlewares', () => {
-  const application = new App();
+  const application = App;
 
   it('has a parser', async () => {
     const formData = {
@@ -11,7 +11,7 @@ describe('Middlewares', () => {
       name: 'John Doe',
     };
 
-    application.app.get('/form-data', (req, res) => {
+    application.app.get('/form-data', (req: any, res: any) => {
       res.status(200).json({ statusCode: 200, body: req.body });
     });
 

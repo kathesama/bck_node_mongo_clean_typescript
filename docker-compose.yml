@@ -1,0 +1,26 @@
+version: "3.7"
+services:
+  bck_tm_dam:
+    image: kathemica/bck_tm_dam:1.0.0
+    hostname: node-backend
+    container_name: node-backend
+    restart: always
+    volumes:
+      - ./certs:/usr/app/certs
+    environment:
+      - SERVER_FINGERKEY= SET YOUR RAMDON FINGERKEY HERE
+      - SENDGRID_API_KEY= SET YOUR API KEY HERE
+      - JWT_SECRET= WRITE A RANDOM STRING HERE
+      - CA_TOKEN_MONGO= WRITE YOUR CA.cert PASSWORD HERE
+      - MONGO_URL= INSERT YOUR MONGO_URL HERE
+      - MAIL_OWNER= NAME A MAIL_OWNER HERE
+      - MAIL_USERNAME= SENDGRID USERNAME HERE
+      - MAIL_FROM= SENDGRID MAIL FROM HERE
+    ports:
+      - 8051:8051
+    networks:
+      - api_server_default
+    command: node ./src/main/server/server.js
+networks:
+  api_server_default:
+    driver: bridge

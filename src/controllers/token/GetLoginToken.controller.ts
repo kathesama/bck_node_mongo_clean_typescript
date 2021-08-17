@@ -7,15 +7,18 @@ import { HttpRequest, HttpResponse } from '../../interfaces/http.interface';
 import { logger } from '../../main/config';
 
 import { handleTokensInterface } from '../../interfaces/useCaseDTO/Token.interfaces';
-import userService from '../../domain/services/user.service';
 import { CryptographyValidation } from '../../interfaces/encryptor.interface';
 import { UserModel } from '../../domain/models/User.model';
 // import tokenService from '../../domain/services/token.service';
+import UserService from '../../domain/services/user.service';
 
 export class GetLoginToken implements ControllerInterface {
-  userService = userService;
-
-  constructor(private readonly handleToken: handleTokensInterface, private readonly dcrypt: CryptographyValidation) {
+  constructor(
+    private readonly handleToken: handleTokensInterface,
+    private readonly dcrypt: CryptographyValidation,
+    // eslint-disable-next-line no-unused-vars
+    private readonly userService: typeof UserService
+  ) {
     this.handleToken = handleToken;
     this.dcrypt = dcrypt;
   }

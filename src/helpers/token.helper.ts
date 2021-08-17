@@ -255,7 +255,7 @@ export const verifyToken = async (token: string, type: string, fingerprint: stri
   try {
     const secret = environmentConfig().jwtConfig.SECRET;
 
-    const payload = jwt.verify(token, secret, (err, decoded) => {
+    const payload = jwt.verify(token, secret, (err: any, decoded: any) => {
       if (err) {
         throw new GenericError('Invalid token', StatusCodes.UNAUTHORIZED, ReasonPhrases.UNAUTHORIZED);
       }

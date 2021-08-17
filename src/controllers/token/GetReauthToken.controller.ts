@@ -1,26 +1,15 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable no-unused-vars */
 import { StatusCodes, ReasonPhrases } from 'http-status-codes';
-import { isEqual, isNil } from 'lodash';
 
 import { ControllerInterface } from '../../interfaces/controller.interface';
-import { badRequestHelper, checkAutorizationHeader, clientRequestHelper, serverErrorHelper, successHelper } from '../../helpers/http.helper';
+import { badRequestHelper, serverErrorHelper, successHelper } from '../../helpers/http.helper';
 import { HttpRequest, HttpResponse } from '../../interfaces/http.interface';
 import { logger } from '../../main/config';
 
 import { handleTokensInterface } from '../../interfaces/useCaseDTO/Token.interfaces';
-// import { CryptographyValidation } from '../../interfaces/encryptor.interface';
-// import { AuthenticationToken } from '../../interfaces/jwtToken.interface';
-import userService from '../../domain/services/user.service';
-import { CryptographyValidation } from '../../interfaces/encryptor.interface';
-// import { GenericError } from '../../interfaces/http/errors';
-// import { UserModel } from '../../domain/models/User.model';
-// import tokenService from '../../domain/services/token.service';
-// import { tokenTypes } from '../../domain/enums/token.enum';
 
 export class GetReauthenticationToken implements ControllerInterface {
-  userService = userService;
-
   constructor(private readonly handleToken: handleTokensInterface) {
     this.handleToken = handleToken;
   }

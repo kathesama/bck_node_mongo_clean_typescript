@@ -1,6 +1,8 @@
 import { IUserModelInterface } from '../../interfaces/useCaseDTO/User.interfaces';
 
 export class UserModel implements IUserModelInterface {
+  // eslint-disable-next-line no-undef
+  [x: string]: any;
   firstName: string;
   lastName: string;
   age: number;

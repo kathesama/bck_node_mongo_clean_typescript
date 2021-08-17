@@ -11,7 +11,7 @@ const params: any = {
     // Fingerprint.geoip,
 
     // personalized params
-    (next) => {
+    (next: any) => {
       next(null, {
         fingerKey: environmentConfig().serverConfig.SERVER_FINGERKEY,
       });

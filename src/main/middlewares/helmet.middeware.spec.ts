@@ -2,9 +2,9 @@ import request from 'supertest';
 import App from '../config/app';
 
 describe('Middlewares', () => {
-  const application = new App();
+  const application = App;
   it('HELMET: Should get all 11 settings enabled', async () => {
-    application.app.get('/test-helmet', (req, res) => {
+    application.app.get('/test-helmet', (req: any, res: any) => {
       res.send({ statusCode: 200, body: 'something' });
     });
 

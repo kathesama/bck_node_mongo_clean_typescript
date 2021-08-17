@@ -1,11 +1,11 @@
-import _ from 'lodash';
+import { isNil, isEmpty } from 'lodash';
 
 import { ControllerInterface } from '../../interfaces/controller.interface';
 import { badRequestHelper, serverErrorHelper, successHelper } from '../../helpers/http.helper';
 import { HttpRequest, HttpResponse } from '../../interfaces/http.interface';
 import { logger } from '../../main/config';
 
-import userService from '../../domain/services/user.service';
+import UserService from '../../domain/services/user.service';
 import { DeleteUserInterface } from '../../interfaces/useCaseDTO/User.interfaces';
 
 export class DeleteUserFactorie implements ControllerInterface {
@@ -17,9 +17,9 @@ export class DeleteUserFactorie implements ControllerInterface {
     try {
       const { userId } = httpRequest.params;
 
-      const userDb: any = await userService.getById(userId);
+      const userDb: any = await UserService.getById(userId);
 
-      if (_.isNil(userDb) || _.isEmpty(userDb)) {
+      if (isNil(userDb) || isEmpty(userDb)) {
         return badRequestHelper(new Error(`${userId} doesn't exists`));
       }
 

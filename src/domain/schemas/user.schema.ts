@@ -16,7 +16,7 @@ const userSchema = new Schema(
     },
     age: {
       type: Number,
-      validate(value) {
+      validate(value: any) {
         if (value < 0) {
           throw new Error('Age mus be a positive number');
         }
@@ -27,13 +27,14 @@ const userSchema = new Schema(
       trim: true,
       lowercase: true,
       required: [true, 'Email is mandatory'],
-      validate: {
-        validator: async function (email: string) {
-          const user = await this.constructor.findOne({ email });
-          return user ? this.id === user.id : true;
-        },
-        message: () => 'The specified email address is already in use.',
-      },
+      unique: true,
+      // validate: {
+      //   validator: async function (email: string) {
+      //     const user = await this.constructor.findOne({ email });
+      //     return user ? this._id === user._id : true;
+      //   },
+      //   message: () => 'The specified email address is already in use.',
+      // },
     },
     password: {
       type: String,

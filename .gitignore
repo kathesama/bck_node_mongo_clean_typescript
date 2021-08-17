@@ -109,3 +109,6 @@ dist
 /certs/https/server-csr.pem
 /certs/https/server-key.pem
 /certs/client.crt
+/build
+/.env
+/docker-compose.prod.yml

@@ -1,11 +1,11 @@
 import request from 'supertest';
 import App from '../config/app';
 
-const application = new App();
+const application = App;
 
 describe('Middlewares', () => {
   it('Should Body-Parse', async () => {
-    application.app.post('/body-parser', (req, res) => {
+    application.app.post('/body-parser', (req: any, res: any) => {
       res.send(req.body);
     });
 

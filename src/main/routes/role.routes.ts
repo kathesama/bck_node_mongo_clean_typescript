@@ -1,4 +1,7 @@
 import { Router } from 'express';
+import { authorize } from '../../main/validations/authorize.validation';
+import { tokenTypes } from '../../domain/enums/token.enum';
+// import { authorize } from '../../main/validations/authorize.validation';
 import { AdapterRoute } from '../adapters/express.adapter';
 
 import {
@@ -9,10 +12,12 @@ import {
   makeDeleteRoleFactorie,
 } from '../factories/role.factorie';
 
-export default (router: Router): void => {
-  router.get('/roles', AdapterRoute(makeGetAllRoleFactorie()));
-  router.get('/roles/:id', AdapterRoute(makeGetOneRoleFactorie()));
-  router.post('/roles/', AdapterRoute(makeRegisterRoleFactorie()));
-  router.patch('/roles/:id', AdapterRoute(makeUpdateRoleFactorie()));
-  router.delete('/roles/:id', AdapterRoute(makeDeleteRoleFactorie()));
-};
+const router: Router = Router();
+
+router.get('/', [authorize(tokenTypes.ACCESS, 'ADMIN_ROLE', 'USER_ROLE')], AdapterRoute(makeGetAllRoleFactorie()));
+router.get('/:id', AdapterRoute(makeGetOneRoleFactorie()));
+router.post('/', AdapterRoute(makeRegisterRoleFactorie()));
+router.patch('/:id', AdapterRoute(makeUpdateRoleFactorie()));
+router.delete('/:id', AdapterRoute(makeDeleteRoleFactorie()));
+
+export { router as roleRoutes };

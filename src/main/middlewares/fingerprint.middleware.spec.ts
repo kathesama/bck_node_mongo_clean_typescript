@@ -2,10 +2,10 @@ import App from '../config/app';
 import request from 'supertest';
 
 describe('Middlewares', () => {
-  const application = new App();
+  const application = App;
 
   it('Has a fingerprint', async () => {
-    application.app.get('/fingerprint', (req, res) => {
+    application.app.get('/fingerprint', (req: any, res: any) => {
       const fingerprint = req.fingerprint.hash;
       res.status(200).json({ fingerprint });
     });

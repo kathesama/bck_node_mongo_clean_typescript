@@ -1,8 +1,7 @@
 /* eslint-disable prettier/prettier */
 import Joi from 'joi';
 import { rolesTypes } from '../../domain/enums/roles.enum';
-// eslint-disable-next-line no-unused-vars
-import { password, objectId, acceptedLanguage, isValidResetToken } from './customRequestParams.validation';
+import { password, objectId, acceptedLanguage } from './customRequestParams.validation';
 
 const createUser = {
   headers: Joi.object().keys({

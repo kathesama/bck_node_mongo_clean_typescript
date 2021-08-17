@@ -1,32 +1,32 @@
-import fg from 'fast-glob';
-import { Express, Router } from 'express';
-import swaggerUi from 'swagger-ui-express';
+// import fg from 'fast-glob';
+import * as express from 'express';
+// import swaggerUi from 'swagger-ui-express';
 // import { environmentConfig } from './environment.config';
+import { roleRoutes } from '../routes/role.routes';
+import { sessionRoutes } from '../routes/session.routes';
+import { testRoutes } from '../routes/test.routes';
+import { userRoutes } from '../routes/user.routes';
 
-const loadRoutes = (router: Router) => {
-  fg.sync('**/src/main/routes/**routes.ts', { ignore: [] }).map(async (file) => (await import(`../../../${file}`)).default(router));
-};
+export default (app: express.Express): void => {
+  const routes: express.Router = express.Router();
+  const basePath = '/api/v1';
 
-export default (app: Express): void => {
-  const router = Router();
+  // routes.use(
+  //   '/docs',
+  //   swaggerUi.serve,
+  //   swaggerUi.setup(undefined, {
+  //     swaggerOptions: {
+  //       url: '/swagger.json',
+  //     },
+  //   })
+  // );
 
-  app.use(
-    '/docs',
-    swaggerUi.serve,
-    swaggerUi.setup(undefined, {
-      swaggerOptions: {
-        url: '/swagger.json',
-      },
-    })
-  );
+  routes.use('/tests', testRoutes);
+  routes.use('/roles', roleRoutes);
+  routes.use('/users', userRoutes);
+  routes.use('/auths', sessionRoutes);
 
-  // const env = environmentConfig().ENV;
-  // console.log(env);
-
-  app.use('/api/v1', router);
-
-  loadRoutes(router);
-
+  app.use(basePath, routes);
   /*
 
     if (this.#environment['env'].ENV === 'development') {

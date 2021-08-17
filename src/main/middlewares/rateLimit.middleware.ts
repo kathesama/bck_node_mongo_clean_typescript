@@ -1,8 +1,8 @@
 import rateLimit from 'express-rate-limit';
 import { environmentConfig } from '../config';
-import { HttpResponse } from '../../interfaces/http.interface';
+// import { HttpResponse } from '../../interfaces/http.interface';
 
-const message: HttpResponse = {
+const message: any = {
   statusCode: 429, // optional, of course
   body: {
     error: 'You are doing that too much. Please try again in while.',

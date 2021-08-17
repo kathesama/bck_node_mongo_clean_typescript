@@ -16,8 +16,12 @@ const roleSchema = new Schema(
   { timestamps: true }
 );
 
+interface PropMapping {
+  [key: string]: any;
+}
+
 roleSchema.method('toJSON', function () {
-  const { _id, ...temporaryObject } = this.toObject();
+  const { _id, ...temporaryObject }: PropMapping = this.toObject();
 
   temporaryObject['uuid'] = _id;
   delete temporaryObject.__v;

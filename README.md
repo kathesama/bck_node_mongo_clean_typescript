@@ -136,4 +136,36 @@ Generar certificados TLS, pasos:
 2. openssl req -new -sha256 -key server-key.pem -out server-csr.pem
 3. openssl x509 -req -days 3650 -in server-csr.pem -signkey server-key.pem -out server-cert.pem
 
+---
+# Building docker images
 
+## Steps:
+1. Create a config file:
+> docker buildx create --name mybuilderconfig --use
+
+2. Configure the builder:
+> docker buildx create --name mybuilderconfig --use
+
+3. Build the image:
+> docker buildx build --platform linux/amd64,linux/arm64,linux/arm/v7 -f Dockerfile -t kathemica/bck_tm_dam:1.0.0 --push .
+
+---
+# Running container
+```
+docker run -d \
+--name=nodeBckTPDam \
+-p 8051:8051 \
+--restart always \
+-e SERVER_FINGERKEY="SET YOUR RAMDON FINGERKEY HERE" \
+-e SENDGRID_API_KEY="SET YOUR API KEY HERE" \
+-e JWT_SECRET="WRITE A RANDOM STRING HERE" \
+-e CA_TOKEN_MONGO="WRITE YOUR CA.cert PASSWORD HERE" \
+-e MONGO_URL="INSERT YOUR MONGO_URL HERE" \
+-e MAIL_OWNER="NAME A MAIL_OWNER HERE" \
+-e MAIL_USERNAME="SENDGRID USERNAME HERE" \
+-e MAIL_FROM="SENDGRID MAIL FROM HERE" \
+-v $(pwd)/certs:/usr/app/certs \
+kathemica/bck_tm_dam:1.0.0
+
+```
+*$(pwd)*: is the actual path.

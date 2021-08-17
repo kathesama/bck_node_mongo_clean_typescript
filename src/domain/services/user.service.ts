@@ -30,7 +30,7 @@ class UserService {
     return one;
   }
 
-  async getAllById(id: string): Promise<UserModel> {
+  async getAllById(id: string): Promise<UserModel[]> {
     const query = {
       $and: [{ _id: id }],
     };

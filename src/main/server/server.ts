@@ -1,7 +1,7 @@
 import App from '../config/app';
 import { logger } from '../config/';
 
-const app = new App();
+const app = App;
 
 app.start();
 
@@ -11,7 +11,7 @@ const exitHandler = () => {
   }
 };
 
-const unexpectedErrorHandler = (error) => {
+const unexpectedErrorHandler = (error: any) => {
   logger.error(error);
   exitHandler();
 };

@@ -5,13 +5,15 @@ import { GetLoginToken } from '../../controllers/token/GetLoginToken.controller'
 import { GetReauthenticationToken } from '../../controllers/token/GetReauthToken.controller';
 import { DcryptAdapter } from '../adapters/bcrypt.adapter';
 import { GetLogoutToken } from '../../controllers/token/GetLogoutToken.controller';
+import UserService from '../../domain/services/user.service';
 
 // inyeccion de dependencias
 export const makeLoginFactorie = (): GetLoginToken => {
   const dcryptAdapter = new DcryptAdapter();
   const handleTokenDB = new HandleTokenUseCaseDB();
+  const userService = UserService;
 
-  const handledTokenRegister = new GetLoginToken(handleTokenDB, dcryptAdapter);
+  const handledTokenRegister = new GetLoginToken(handleTokenDB, dcryptAdapter, userService);
 
   return handledTokenRegister;
 };

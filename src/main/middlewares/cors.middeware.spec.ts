@@ -1,10 +1,10 @@
 import request from 'supertest';
 import App from '../config/app';
 
-const application = new App();
+const application = App;
 describe('Middlewares', () => {
   it('Should verify open cors', async () => {
-    application.app.post('/test-cors', (req, res) => {
+    application.app.post('/test-cors', (req: any, res: any) => {
       res.send();
     });
 

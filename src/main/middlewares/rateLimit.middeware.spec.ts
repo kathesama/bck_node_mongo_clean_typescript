@@ -3,9 +3,9 @@ import { environmentConfig } from '../config';
 import App from '../config/app';
 
 describe('Middlewares', () => {
-  const application = new App();
+  const application = App;
   it('Should limit rate', async () => {
-    application.app.get('/limit-rate', (req, res) => {
+    application.app.get('/limit-rate', (req: any, res: any) => {
       res.send({ statusCode: 200, body: 'something' });
     });
 

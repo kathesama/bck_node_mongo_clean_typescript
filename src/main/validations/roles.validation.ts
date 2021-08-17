@@ -2,7 +2,8 @@ import { isNil } from 'lodash';
 import { ReasonPhrases, StatusCodes } from 'http-status-codes';
 import { GenericError } from '../../interfaces/http/errors';
 
-const validateRoles = (user = null, requiredRoles: any[]): boolean => {
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+const validateRoles = (user: any, requiredRoles: any[]): boolean => {
   try {
     if (isNil(user)) {
       throw new GenericError('User can not be null', StatusCodes.PRECONDITION_FAILED, ReasonPhrases.PRECONDITION_FAILED);

@@ -16,35 +16,36 @@ import {
   MakeRequestResetPasswordFactorie,
 } from '../factories/user.factorie';
 
-export default (router: Router): void => {
-  router
-    .route('/users/')
-    .get(
-      [authorize(tokenTypes.ACCESS, 'ADMIN_ROLE', 'USER_ROLE'), validateRequestParams(userValidation.getUsers)],
-      AdapterRoute(makeGetAllUserFactorie())
-    );
+const router: Router = Router();
 
-  router
-    .route('/users/:userId')
-    .get(
-      [authorize(tokenTypes.ACCESS, 'ADMIN_ROLE', 'USER_ROLE'), validateRequestParams(userValidation.getUser)],
-      AdapterRoute(makeGetOneUserFactorie())
-    )
-    .patch([authorize(tokenTypes.ACCESS, 'ADMIN_ROLE'), validateRequestParams(userValidation.updateUser)], AdapterRoute(makeUpdateUserFactorie()))
-    .delete([authorize(tokenTypes.ACCESS, 'ADMIN_ROLE'), validateRequestParams(userValidation.deleteUser)], AdapterRoute(makeDeleteUserFactorie()));
+router
+  .route('/')
+  .get(
+    [authorize(tokenTypes.ACCESS, 'ADMIN_ROLE', 'USER_ROLE'), validateRequestParams(userValidation.getUsers)],
+    AdapterRoute(makeGetAllUserFactorie())
+  );
 
-  router
-    .route('/signup/')
-    .post([authorize(tokenTypes.ACCESS, 'ADMIN_ROLE'), validateRequestParams(userValidation.createUser)], AdapterRoute(makeRegisterUserFactorie()));
+router
+  .route('/:userId')
+  .get(
+    [authorize(tokenTypes.ACCESS, 'ADMIN_ROLE', 'USER_ROLE'), validateRequestParams(userValidation.getUser)],
+    AdapterRoute(makeGetOneUserFactorie())
+  )
+  .patch([authorize(tokenTypes.ACCESS, 'ADMIN_ROLE'), validateRequestParams(userValidation.updateUser)], AdapterRoute(makeUpdateUserFactorie()))
+  .delete([authorize(tokenTypes.ACCESS, 'ADMIN_ROLE'), validateRequestParams(userValidation.deleteUser)], AdapterRoute(makeDeleteUserFactorie()));
 
-  router.route('/verify-user/').get([validateRequestParams(userValidation.verifyUserEmail)], AdapterRoute(makeVerifyUserEmailFactorie()));
+router
+  .route('/signup/')
+  .post([authorize(tokenTypes.ACCESS, 'ADMIN_ROLE'), validateRequestParams(userValidation.createUser)], AdapterRoute(makeRegisterUserFactorie()));
 
-  // TODO: implementar la logica en la factorie
-  router
-    .route('/reset-password/')
-    .post([validateRequestParams(userValidation.requestResetUserPassword)], AdapterRoute(MakeRequestResetPasswordFactorie()));
+router.route('/verify-user/').get([validateRequestParams(userValidation.verifyUserEmail)], AdapterRoute(makeVerifyUserEmailFactorie()));
 
-  router
-    .route('/reset-password/:key')
-    .patch([validateRequestParams(userValidation.runResetUserPassword)], AdapterRoute(RunRequestResetPasswordFactorie()));
-};
+router
+  .route('/reset-password/')
+  .post([validateRequestParams(userValidation.requestResetUserPassword)], AdapterRoute(MakeRequestResetPasswordFactorie()));
+
+router
+  .route('/reset-password/:key')
+  .patch([validateRequestParams(userValidation.runResetUserPassword)], AdapterRoute(RunRequestResetPasswordFactorie()));
+
+export { router as userRoutes };

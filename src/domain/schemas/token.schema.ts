@@ -15,6 +15,7 @@ const tokenSchema = new Schema(
     fingerprint: {
       type: String,
       required: true,
+      unique: true,
       index: true,
     },
     user: {
@@ -40,6 +41,6 @@ const tokenSchema = new Schema(
 );
 
 tokenSchema.plugin(timeZone, { paths: ['timestamps'] });
-tokenSchema.index({ token: 1, fingerprint: 1 }, { unique: true });
+// tokenSchema.index({ token: '1', fingerprint: '1' }, { unique: true });
 
 export default tokenSchema;

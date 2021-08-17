@@ -1,5 +1,5 @@
 import bcryptjs from 'bcryptjs';
-import _ from 'lodash';
+import { isNil, isEmpty } from 'lodash';
 
 import { ControllerInterface } from '../../interfaces/controller.interface';
 import { badRequestHelper, serverErrorHelper, successHelper } from '../../helpers/http.helper';
@@ -25,9 +25,9 @@ export class PatchUserFactorie implements ControllerInterface {
     try {
       const { userId } = httpRequest.params;
 
-      const userDb: UserModel = await UserService.getAllById(userId);
+      const userDb: Array<UserModel> = await UserService.getAllById(userId);
 
-      if (_.isNil(userDb) || _.isEmpty(userDb)) {
+      if (isNil(userDb) || isEmpty(userDb)) {
         return badRequestHelper(new Error(`${userId} doesn't exists`));
       }
 

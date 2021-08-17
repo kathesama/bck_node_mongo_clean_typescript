@@ -1,9 +1,11 @@
-/*
- * For a detailed explanation regarding each configuration property and type check, visit:
- * https://jestjs.io/docs/configuration
- */
-
 export default {
+  // globals: {
+  //   extensionsToTreatAsEsm: ['.ts', '.js'],
+  //   'ts-jest': {
+  //       useESM: true
+  //   }
+  // },
+  // preset: 'ts-jest/presets/js-with-ts-esm',
   roots: ['<rootDir>/src'],
   collectCoverageFrom: [
     '<rootDir>/src/**/*.ts',
@@ -31,7 +33,9 @@ export default {
   clearMocks: true,
   // coveragePathIgnorePatterns: ['node_modules', 'src/main/config', 'src/app.js', 'tests'],
   testMatch: ['**/?(*.)+(spec|test).[jt]s?(x)'],
+  extensionsToTreatAsEsm: ['.ts', '.tsx'],
   transform: {
     '.+\\.ts$': 'ts-jest',
+    "^.+\\.js$": "babel-jest"
   },
 };

@@ -5,7 +5,8 @@ import { StatusCodes, ReasonPhrases } from 'http-status-codes';
 import { GenericError } from '../../interfaces/http/errors';
 import { badRequestHelper } from '../../helpers/http.helper';
 import validateRoles from './roles.validation';
-import userService from '../../domain/services/user.service';
+import UserService from '../../domain/services/user.service';
+import { UserModel } from '../../domain/models/User.model';
 
 export const validateUser = async (uuid: string, requiredRoles: any[]): Promise<any> => {
   try {
@@ -13,7 +14,7 @@ export const validateUser = async (uuid: string, requiredRoles: any[]): Promise<
       throw new GenericError('User ID is required', StatusCodes.PRECONDITION_FAILED, ReasonPhrases.PRECONDITION_FAILED);
     }
 
-    const user = await userService.getById(uuid);
+    const user: UserModel = await UserService.getById(uuid);
 
     if (!user) {
       throw new GenericError('A valid user is required to perform this action', StatusCodes.UNAUTHORIZED, ReasonPhrases.UNAUTHORIZED);

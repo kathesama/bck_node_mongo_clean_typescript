@@ -51,7 +51,7 @@ export const environmentConfig = (): any => {
   }
 
   const { APP_PATH } = envVars;
-  const ENV = envVars.NODE_ENV;
+  const ENV = envVars.NODE_ENV || 'development';
   const VERSION = envVars.npm_package_version;
 
   const serverConfig = {

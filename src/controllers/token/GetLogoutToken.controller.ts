@@ -6,11 +6,8 @@ import { HttpRequest, HttpResponse } from '../../interfaces/http.interface';
 import { logger } from '../../main/config';
 
 import { handleTokensInterface } from '../../interfaces/useCaseDTO/Token.interfaces';
-import userService from '../../domain/services/user.service';
 
 export class GetLogoutToken implements ControllerInterface {
-  userService = userService;
-
   constructor(private readonly handleToken: handleTokensInterface) {
     this.handleToken = handleToken;
   }

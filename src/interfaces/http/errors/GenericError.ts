@@ -3,6 +3,7 @@ export class GenericError extends Error {
   content: string;
   statusCode?: number | string;
   timestamp?: Date;
+  stack?: any;
 
   constructor(error: Error | string, code: number | string = 'UNINITIALIZED', errorName: string, timestamp: Date = new Date(), getFullStack = false) {
     super(`${error}`);

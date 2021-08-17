@@ -5,7 +5,7 @@ export class RoleModel implements IRoleModelInterface {
   isActive: boolean;
 
   constructor(role?: string) {
-    this.role = role;
+    this.role = role || 'USER_ROLE';
     this.isActive = true;
   }
 }
