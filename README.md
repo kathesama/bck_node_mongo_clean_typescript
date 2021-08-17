@@ -147,10 +147,13 @@ Generar certificados TLS, pasos:
 > docker buildx create --name mybuilderconfig --use
 
 3. Build the image:
-> docker buildx build --platform linux/amd64,linux/arm64,linux/arm/v8 -f Dockerfile -t kathemica/bck_node_mongo_clean:1.0.0 --push .
+> docker buildx build --platform linux/amd64,linux/arm64,linux/arm/v7 -f Dockerfile -t kathemica/bck_node_mongo_clean:1.0.0 --push .
 
 ---
 # Running container
+
+With docker command:
+
 ```
 docker run -d \
 --name=nodeBckTPDam \
@@ -165,7 +168,11 @@ docker run -d \
 -e MAIL_USERNAME="SENDGRID USERNAME HERE" \
 -e MAIL_FROM="SENDGRID MAIL FROM HERE" \
 -v $(pwd)/certs:/usr/app/certs \
-kathemica/bck_tm_dam:1.0.0
+kathemica/bck_node_mongo_clean:1.0.0
 
 ```
 *$(pwd)*: is the actual path.
+
+With docker compose
+
+> docker-compose -f .\<docker-compose-file>.yml up

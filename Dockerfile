@@ -10,6 +10,7 @@ WORKDIR /usr/app
 # COPY ALL NEEDED FILES TO THE DOCKER CONTAINER
 COPY ./src ./src
 COPY package.json ./
+COPY package-lock.json ./
 COPY tsoa.json ./
 COPY tsconfig.json ./
 COPY .babelrc ./
