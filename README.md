@@ -38,29 +38,7 @@ a. $ npm i -D lint-staged<br>
 b. $ npm set-script prepare "husky install"<br>
 c. $ npm run prepare<br>
 d. $ npx husky add .husky/pre-commit 'npx lint-staged'<br>
-e. Abrir VSCode y crear el archivo **.lintstagedrc.json** en la raíz, agregar el siguiente contenido:
-```
-{
-  "*.js": [
-    "eslint 'src/**'"
-  ]
-}
-```
-f. Instalar eslint y sus dependencias en desarrollo, instalar:<br>
-
-```
-eslint
-eslint-config-standard-with-typescript
-eslint-plugin-import
-eslint-plugin-node
-eslint-plugin-promise
-eslint-plugin-standard
-@typescript-eslint/eslint-plugin
-```
-g. Para tener un patron de desarrollo en git<br>
-```
-npm i -D git-commit-msg-linter
-```
+e. Este proyecto usa *git-commit-msg-linter* para tener un patron de desarrollo en git<br>
 
 ```
 correct format: <type>[scope]: <subject>

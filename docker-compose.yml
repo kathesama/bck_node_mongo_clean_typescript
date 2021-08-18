@@ -1,7 +1,7 @@
 version: "3.7"
 services:
   bck_node_mongo_clean:
-    image: kathemica/bck_node_mongo_clean:1.0.0
+    image: kathemica/bck_node_mongo_clean:latest
     hostname: node-backend
     container_name: node-backend
     restart: always
