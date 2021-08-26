@@ -1,0 +1,26 @@
+version: "3.4"
+services:
+
+  mongodb_dev:
+    image: mongo:latest
+    container_name: mongodb_dev
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=root
+      - MONGO_INITDB_ROOT_PASSWORD=pass12345
+    volumes:
+      - ./mongo/db:/data/db
+      - ./mongo/dump-db:/data/dump-db
+      - ./mongo/restore.sh:/docker-entrypoint-initdb.d/mongorestore.sh
+    networks:
+      -   api_server_default
+    ports:
+      - 27017:27017
+    healthcheck:
+      test: echo 'db.runCommand("ping").ok' | mongo localhost:27017/test --quiet
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    restart: unless-stopped
+networks:
+  api_server_default:
+    driver: bridge

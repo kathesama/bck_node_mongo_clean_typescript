@@ -185,3 +185,20 @@ Aditionally you must indicate in an environment variable to turn on https at doc
 
 ### **NOTE**:
 Only for connections with **atlas** you must enable *IS_TLS_MONGO=true*, with only that will work perfectly.
+
+## Dev ambient settings
+**Username**: someMail@dominiom.com
+**Password**: Pa$1345678
+
+### Starting up dev:
+> docker-compose -f .\docker-compose.dev.yml up
+
+### Console connections:
+> docker exec -it mongodb_dev mongo /bin/bash
+
+#### Backup database:
+> mongodump --authenticationDatabase admin -d cleanCode -u root -p pass12345 -o dump-db
+
+#### Restore database:
+> mongorestore  --authenticationDatabase admin -d cleanCode -u root -p pass12345
+

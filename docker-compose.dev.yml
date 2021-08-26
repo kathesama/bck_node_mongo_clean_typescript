@@ -1,0 +1,79 @@
+version: "3.4"
+services:
+
+  mongodb_dev:
+    image: mongo:latest
+    container_name: mongodb_dev
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=root
+      - MONGO_INITDB_ROOT_PASSWORD=pass12345
+    volumes:
+      - ./mongo/db:/data/db
+      - ./mongo/dump-db:/data/dump-db
+      - ./mongo/restore.sh:/docker-entrypoint-initdb.d/mongorestore.sh
+    networks:
+      -   api_server_default
+    ports:
+      - 27017:27017
+    healthcheck:
+      test: echo 'db.runCommand("ping").ok' | mongo localhost:27017/test --quiet
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    restart: unless-stopped
+
+  bck_node_mongo_clean:
+    image: kathemica/bck_node_mongo_clean:1.0.1
+    hostname: node-backend
+    container_name: node-backend
+    restart: always
+    volumes:
+      - ./certs:/usr/app/certs
+    environment:
+      - MONGO_URL=mongodb://root:pass12345@10.0.0.101:27017/?authSource=admin
+      - IS_TLS_MONGO=false
+      - DB_NAME=cleanCode
+      - SERVER_FINGERKEY=^?32^ZrCDL7unP'7y.QxnFM(!zu3'$gYgCKy[ad,4.DTf&Bq
+      - SENDGRID_API_KEY=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
+      - JWT_SECRET=CKHXpFuHeX[2,?hrG.6U>9vA~4t4B8yatasv&7BD'E&HKx[6,KHKf2hBmU&xPy&G@d.*nK9
+      - CA_TOKEN_MONGO=FcEZ8TK3syIfIGQZNCxYhLLUuet2HE6LJYPQ5c0
+      - MAIL_OWNER=Katherine Aguirre
+      - MAIL_USERNAME=kathemica
+      - MAIL_FROM=kathemica@gmail.com
+      - isHTTPS=false
+    ports:
+      - 8051:8051
+      - 443:443
+    networks:
+      - api_server_default
+    command: node ./src/main/server/server.js
+    depends_on:
+      - mongodb_dev
+
+  mongo-express:
+    image: mongo-express
+    container_name: mongo-express
+    environment:
+      - ME_CONFIG_MONGODB_SERVER=10.0.0.101
+      - ME_CONFIG_MONGODB_ENABLE_ADMIN=true
+      - ME_CONFIG_MONGODB_ADMINUSERNAME=root
+      - ME_CONFIG_MONGODB_ADMINPASSWORD=pass12345
+      - ME_CONFIG_BASICAUTH_USERNAME=admin
+      - ME_CONFIG_BASICAUTH_PASSWORD=admin123
+    volumes:
+      - ./mongodbdata:/data/db
+    depends_on:
+      - mongodb_dev
+    networks:
+      - api_server_default
+    ports:
+      - 8081:8081
+    healthcheck:
+      test:  wget --quiet --tries=3 --spider http://admin:admin123@10.0.0.101:8081 || exit 1
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    restart: unless-stopped
+networks:
+  api_server_default:
+    driver: bridge
