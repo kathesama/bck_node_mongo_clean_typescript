@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import timeZone from 'mongoose-timezone';
 // import validator from 'validator';
 import { rolesTypes } from '../enums/roles.enum';
 
@@ -6,6 +7,9 @@ const { Schema } = mongoose;
 
 const userSchema = new Schema(
   {
+    userId: {
+      type: String,
+    },
     firstName: {
       type: String,
       required: [true, 'Name is mandatory'],
@@ -38,13 +42,14 @@ const userSchema = new Schema(
     },
     password: {
       type: String,
-      required: [true, 'Pasdword is mandatory'],
+      required: [true, 'Password is mandatory'],
     },
     image: {
       type: String,
     },
     role: {
-      type: String,
+      type: mongoose.SchemaTypes.ObjectId,
+      ref: 'Roles',
       required: true,
       default: 'USER_ROLE',
       enum: rolesTypes,
@@ -56,6 +61,9 @@ const userSchema = new Schema(
   },
   { timestamps: true }
 );
+
+userSchema.plugin(timeZone, { paths: ['timestamps'] });
+userSchema.index({ _id: 1, userId: 1 }, { unique: true });
 
 userSchema.method('toJSON', function () {
   const { _id, ...temporaryObject } = this.toObject();

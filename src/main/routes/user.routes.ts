@@ -17,23 +17,7 @@ import {
 } from '../factories/user.factorie';
 
 const router: Router = Router();
-
-router
-  .route('/')
-  .get(
-    [authorize(tokenTypes.ACCESS, 'ADMIN_ROLE', 'USER_ROLE'), validateRequestParams(userValidation.getUsers)],
-    AdapterRoute(makeGetAllUserFactorie())
-  );
-
-router
-  .route('/:userId')
-  .get(
-    [authorize(tokenTypes.ACCESS, 'ADMIN_ROLE', 'USER_ROLE'), validateRequestParams(userValidation.getUser)],
-    AdapterRoute(makeGetOneUserFactorie())
-  )
-  .patch([authorize(tokenTypes.ACCESS, 'ADMIN_ROLE'), validateRequestParams(userValidation.updateUser)], AdapterRoute(makeUpdateUserFactorie()))
-  .delete([authorize(tokenTypes.ACCESS, 'ADMIN_ROLE'), validateRequestParams(userValidation.deleteUser)], AdapterRoute(makeDeleteUserFactorie()));
-
+/* /users */
 router
   .route('/signup/')
   .post([authorize(tokenTypes.ACCESS, 'ADMIN_ROLE'), validateRequestParams(userValidation.createUser)], AdapterRoute(makeRegisterUserFactorie()));
@@ -48,4 +32,19 @@ router
   .route('/reset-password/:key')
   .patch([validateRequestParams(userValidation.runResetUserPassword)], AdapterRoute(RunRequestResetPasswordFactorie()));
 
+router
+  .route('/:userId')
+  .get(
+    [authorize(tokenTypes.ACCESS, 'ADMIN_ROLE', 'USER_ROLE'), validateRequestParams(userValidation.getUser)],
+    AdapterRoute(makeGetOneUserFactorie())
+  )
+  .patch([authorize(tokenTypes.ACCESS, 'ADMIN_ROLE'), validateRequestParams(userValidation.updateUser)], AdapterRoute(makeUpdateUserFactorie()))
+  .delete([authorize(tokenTypes.ACCESS, 'ADMIN_ROLE'), validateRequestParams(userValidation.deleteUser)], AdapterRoute(makeDeleteUserFactorie()));
+
+router
+  .route('/')
+  .get(
+    [authorize(tokenTypes.ACCESS, 'ADMIN_ROLE', 'USER_ROLE'), validateRequestParams(userValidation.getUsers)],
+    AdapterRoute(makeGetAllUserFactorie())
+  );
 export { router as userRoutes };

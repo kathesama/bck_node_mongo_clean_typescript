@@ -9,7 +9,7 @@ import { tokenTypes } from '../../domain/enums/token.enum';
 import * as userValidation from '../validations/userRequestParams.validation';
 
 const router: Router = Router();
-
+/* /auths */
 router.route('/login/').post([validateRequestParams(userValidation.loginUser)], AdapterRoute(makeLoginFactorie()));
 router
   .route('/reauthenticate/')

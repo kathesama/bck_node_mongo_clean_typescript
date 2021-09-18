@@ -10,6 +10,7 @@ import { Cryptography } from '../../interfaces/encryptor.interface';
 import { UserModel } from '../../domain/models/User.model';
 import { sendResetPasswordEmail, sendVerificationEmail } from '../../helpers/email.helper';
 import { handleVerifyEmailTokensInterface } from '../../interfaces/useCaseDTO/Token.interfaces';
+import { GetOneRoleByNameInterface, GetOneRoleInterface } from '../../interfaces/useCaseDTO/Role.interfaces';
 import { GenericError } from '../../interfaces/http/errors';
 import { tokenTypes } from '../../domain/enums/token.enum';
 
@@ -20,29 +21,33 @@ export class RegisterUserFactorie implements ControllerInterface {
   constructor(
     private readonly addUser: AddUserInterface,
     private readonly dcrypt: Cryptography,
-    private readonly handleToken: handleVerifyEmailTokensInterface
+    private readonly handleToken: handleVerifyEmailTokensInterface,
+    private readonly handleRoles: GetOneRoleByNameInterface
   ) {
     this.addUser = addUser;
     this.dcrypt = dcrypt;
     this.handleToken = handleToken;
+    this.handleRoles = handleRoles;
   }
 
   async handle(httpRequest: HttpRequest): Promise<HttpResponse> {
     try {
       // TODO es posible que esta siguiente seccion de codigo esté demás, revisar
-      const requiredField = ['email', 'password'];
-      for (const field of requiredField) {
-        if (!httpRequest.body[field]) {
-          return badRequestHelper(new Error(`${field}`));
-        }
-      }
+      // const requiredField = ['email', 'password'];
+      // for (const field of requiredField) {
+      //   if (!httpRequest.body[field]) {
+      //     return badRequestHelper(new Error(`${field}`));
+      //   }
+      // }
       // hasta aqui
 
       const { email, password, firstName, lastName, age, image, role, isActive } = httpRequest.body;
 
       const crypPassword: string = await this.dcrypt.encrypt(password);
 
-      const userAdded: any = await this.addUser.add(new UserModel(email, crypPassword, firstName, lastName, age, image, role, isActive));
+      const roleObj: any = await this.handleRoles.getOneByName(role);
+
+      const userAdded: any = await this.addUser.add(new UserModel(email, crypPassword, firstName, lastName, age, image, roleObj._doc._id, isActive));
 
       const confirmToken = await this.handleToken.generateMailedToken(userAdded.id, httpRequest.fingerprint.hash, tokenTypes.VERIFY_EMAIL);
 

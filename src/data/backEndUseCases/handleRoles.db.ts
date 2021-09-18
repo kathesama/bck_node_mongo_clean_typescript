@@ -7,9 +7,12 @@ import {
   GetRoleInterface,
   IRoleModelInterface,
   PatchRoleInterface,
+  GetOneRoleByNameInterface,
 } from '../../interfaces/useCaseDTO/Role.interfaces';
 
-export class HandleRoleUseCaseDB implements GetRoleInterface, GetOneRoleInterface, AddRoleInterface, PatchRoleInterface, DeleteRoleInterface {
+export class HandleRoleUseCaseDB
+  implements GetRoleInterface, GetOneRoleInterface, AddRoleInterface, PatchRoleInterface, DeleteRoleInterface, GetOneRoleByNameInterface
+{
   roleService: any;
 
   constructor() {
@@ -24,6 +27,12 @@ export class HandleRoleUseCaseDB implements GetRoleInterface, GetOneRoleInterfac
 
   async getOne(role: string): Promise<IRoleModelInterface> {
     const roleDB: any = await this.roleService.getById(role);
+
+    return new Promise((resolve) => resolve(roleDB));
+  }
+
+  async getOneByName(role: string): Promise<IRoleModelInterface> {
+    const roleDB: any = await this.roleService.getByName(role);
 
     return new Promise((resolve) => resolve(roleDB));
   }

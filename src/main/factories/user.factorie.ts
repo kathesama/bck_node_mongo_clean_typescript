@@ -1,4 +1,5 @@
 import { HandleUserUseCaseDB } from '../../data/backEndUseCases/handleUsers.db';
+import { HandleRoleUseCaseDB } from '../../data/backEndUseCases/handleRoles.db';
 import { MakeResetPasswordFactorie, RegisterUserFactorie } from '../../controllers/user/PostUser.controller';
 
 import { GetAllUser, GetOneUser, GetVerifyMailUser } from '../../controllers/user/GetUser.controller';
@@ -28,8 +29,9 @@ export const makeRegisterUserFactorie = (): RegisterUserFactorie => {
   const handleUserDB = new HandleUserUseCaseDB();
   const dcryptAdapter = new BcryptAdapter();
   const handleTokenDB = new HandleTokenUseCaseDB();
+  const handleRolesDB = new HandleRoleUseCaseDB();
 
-  const handledUserRegister = new RegisterUserFactorie(handleUserDB, dcryptAdapter, handleTokenDB);
+  const handledUserRegister = new RegisterUserFactorie(handleUserDB, dcryptAdapter, handleTokenDB, handleRolesDB);
 
   return handledUserRegister;
 };

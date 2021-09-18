@@ -14,10 +14,10 @@ import {
 
 const router: Router = Router();
 
-router.get('/', [authorize(tokenTypes.ACCESS, 'ADMIN_ROLE', 'USER_ROLE')], AdapterRoute(makeGetAllRoleFactorie()));
-router.get('/:id', AdapterRoute(makeGetOneRoleFactorie()));
-router.post('/', AdapterRoute(makeRegisterRoleFactorie()));
-router.patch('/:id', AdapterRoute(makeUpdateRoleFactorie()));
-router.delete('/:id', AdapterRoute(makeDeleteRoleFactorie()));
+router.get('/', [authorize(tokenTypes.ACCESS, 'ADMIN_ROLE')], AdapterRoute(makeGetAllRoleFactorie()));
+router.get('/:id', [authorize(tokenTypes.ACCESS, 'ADMIN_ROLE')], AdapterRoute(makeGetOneRoleFactorie()));
+router.post('/', [authorize(tokenTypes.ACCESS, 'ADMIN_ROLE')], AdapterRoute(makeRegisterRoleFactorie()));
+router.patch('/:id', [authorize(tokenTypes.ACCESS, 'ADMIN_ROLE')], AdapterRoute(makeUpdateRoleFactorie()));
+router.delete('/:id', [authorize(tokenTypes.ACCESS, 'ADMIN_ROLE')], AdapterRoute(makeDeleteRoleFactorie()));
 
 export { router as roleRoutes };

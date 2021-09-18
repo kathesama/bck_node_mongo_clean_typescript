@@ -8,4 +8,13 @@ export class RoleModel implements IRoleModelInterface {
     this.role = role || 'USER_ROLE';
     this.isActive = true;
   }
+
+  toJson(): any {
+    const obj = {
+      role: this.role,
+      isActive: this.isActive,
+    };
+
+    return JSON.stringify(obj);
+  }
 }

@@ -2,6 +2,7 @@ import { UserModel } from '../../domain/models/User.model';
 
 // aca se crean las interfaces para luego ser implementadas en el useCase de DB
 export interface IUserModelInterface {
+  userId: string;
   firstName: string;
   lastName: string;
   age: number;

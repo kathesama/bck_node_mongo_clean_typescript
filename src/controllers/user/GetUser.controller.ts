@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 import { ControllerInterface } from '../../interfaces/controller.interface';
-import { serverErrorHelper, successHelper } from '../../helpers/http.helper';
+import { badRequestHelper, serverErrorHelper, successHelper } from '../../helpers/http.helper';
 import { HttpRequest, HttpResponse } from '../../interfaces/http.interface';
 import { logger } from '../../main/config';
 
@@ -61,6 +61,10 @@ export class GetVerifyMailUser implements ControllerInterface {
     try {
       const { key } = httpRequest.query;
 
+      if (!key) {
+        return badRequestHelper(new Error('Invalid key'));
+      }
+
       const tokenDoc = await this.handleToken.verifyToken(key, tokenTypes.VERIFY_EMAIL, httpRequest.fingerprint.hash);
 
       const user: any = await this.getUser.findOneAndActivate(tokenDoc._doc.user.toString());
@@ -70,7 +74,8 @@ export class GetVerifyMailUser implements ControllerInterface {
       return successHelper(user);
     } catch (error) {
       logger.error(error);
-      throw serverErrorHelper(error);
+      return serverErrorHelper(error);
+      // throw serverErrorHelper(error);
     }
   }
 }

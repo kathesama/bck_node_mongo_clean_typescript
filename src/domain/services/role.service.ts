@@ -16,6 +16,14 @@ class RoleService {
     return one;
   }
 
+  async getByName(name: string): Promise<any> {
+    const query = {
+      $and: [{ role: name }, { isActive: true }],
+    };
+    const one: any = RoleRepository.findOne(query);
+    return one;
+  }
+
   async add(role: string): Promise<any> {
     const one: any = RoleRepository.create(role);
     return one;

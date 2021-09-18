@@ -14,6 +14,11 @@ export interface GetOneRoleInterface {
   getOne: (id: string) => Promise<IRoleModelInterface>;
 }
 
+export interface GetOneRoleByNameInterface {
+  // eslint-disable-next-line no-unused-vars
+  getOneByName: (role: string) => Promise<IRoleModelInterface>;
+}
+
 export interface AddRoleInterface {
   // eslint-disable-next-line no-unused-vars
   add: (role: RoleModel) => Promise<IRoleModelInterface>;
