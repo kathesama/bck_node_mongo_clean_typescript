@@ -9,9 +9,16 @@ const createUser = {
   }),
   body: Joi.object().keys({
     email: Joi.string().required().email(),
-    password: Joi.string().required().custom(password),
+    password: Joi
+      .string()
+      .when('isGoogle', {
+        is: true,
+        then: Joi.optional().allow(''),
+        otherwise: Joi.required().custom(password),
+      }),
     firstName: Joi.string().alphanum().optional(),
     lastName: Joi.string().alphanum().optional(),
+    isGoogle: Joi.boolean().optional(),
     role: Joi.string()
       .required()
       .valid(...Object.values(rolesTypes))
@@ -114,6 +121,19 @@ const loginUser = {
   },
 };
 
+const loginUserGoogle = {
+  headers: Joi.object().keys({
+    'accept-language': Joi.required().custom(acceptedLanguage),
+  }),
+  body: Joi.object().keys({
+    token: Joi.string().required(),
+  }),
+  options: {
+    cache: false,
+    allowUnknown: true,
+  },
+};
+
 const reauthenticateUser = {
   headers: Joi.object().keys({
     'accept-language': Joi.required().custom(acceptedLanguage),
@@ -196,5 +216,6 @@ export {
   verifyUserEmail,
   logoutUser,
   requestResetUserPassword,
-  runResetUserPassword
+  runResetUserPassword,
+  loginUserGoogle,
 };

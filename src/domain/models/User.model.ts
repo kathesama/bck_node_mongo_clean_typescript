@@ -22,7 +22,8 @@ export class UserModel implements IUserModelInterface {
     age?: number,
     image?: string,
     role?: string,
-    isActive?: boolean
+    isActive?: boolean,
+    isGoogle?: boolean
   ) {
     this.userId = uuidv4();
     this.password = password;
@@ -33,6 +34,7 @@ export class UserModel implements IUserModelInterface {
     this.image = image || '';
     this.role = role || 'USER_ROLE';
     this.isActive = isActive || false;
+    this.isGoogle = isGoogle || false;
   }
 
   toJson(): any {
@@ -46,6 +48,7 @@ export class UserModel implements IUserModelInterface {
       image: this.image,
       role: this.role,
       isActive: this.isActive,
+      isGoogle: this.isGoogle,
     };
 
     return JSON.stringify(obj);

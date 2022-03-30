@@ -38,3 +38,12 @@ export const mergeObjects = (previousObj: any, actualObj: any) => {
 
   return previousObj;
 };
+
+/**
+ * Update data for google login
+ * */
+export const upsert = (array, item) => {
+  const i = array.findIndex((_item) => _item.email === item.email);
+  if (i > -1) array[i] = item;
+  else array.push(item);
+};

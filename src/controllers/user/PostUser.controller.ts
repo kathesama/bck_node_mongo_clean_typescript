@@ -5,14 +5,18 @@ import { badRequestHelper, serverErrorHelper, successHelper } from '../../helper
 import { HttpRequest, HttpResponse } from '../../interfaces/http.interface';
 
 import { AddUserInterface, GetOneUserByEmailInterface } from '../../interfaces/useCaseDTO/User.interfaces';
-import { logger } from '../../main/config';
+import { environmentConfig, logger } from '../../main/config';
 import { Cryptography } from '../../interfaces/encryptor.interface';
 import { UserModel } from '../../domain/models/User.model';
 import { sendResetPasswordEmail, sendVerificationEmail } from '../../helpers/email.helper';
-import { handleVerifyEmailTokensInterface } from '../../interfaces/useCaseDTO/Token.interfaces';
+import { handleTokensInterface, handleVerifyEmailTokensInterface } from '../../interfaces/useCaseDTO/Token.interfaces';
 import { GetOneRoleByNameInterface, GetOneRoleInterface } from '../../interfaces/useCaseDTO/Role.interfaces';
 import { GenericError } from '../../interfaces/http/errors';
 import { tokenTypes } from '../../domain/enums/token.enum';
+import { ValidateGoogleUserInterface } from '../../interfaces/useCaseDTO/Google.interfaces';
+import { upsert } from '../../main/utils/utilFunctions';
+import UserService from '../../domain/services/user.service';
+import { isNil } from 'lodash';
 
 export class RegisterUserFactorie implements ControllerInterface {
   // tokenService = TokenService;
@@ -41,13 +45,15 @@ export class RegisterUserFactorie implements ControllerInterface {
       // }
       // hasta aqui
 
-      const { email, password, firstName, lastName, age, image, role, isActive } = httpRequest.body;
+      const { email, password, firstName, lastName, age, image, role, isActive, isGoogle } = httpRequest.body;
 
       const crypPassword: string = await this.dcrypt.encrypt(password);
 
       const roleObj: any = await this.handleRoles.getOneByName(role);
 
-      const userAdded: any = await this.addUser.add(new UserModel(email, crypPassword, firstName, lastName, age, image, roleObj._doc._id, isActive));
+      const userAdded: any = await this.addUser.add(
+        new UserModel(email, crypPassword, firstName, lastName, age, image, roleObj._doc._id, isActive, isGoogle)
+      );
 
       const confirmToken = await this.handleToken.generateMailedToken(userAdded.id, httpRequest.fingerprint.hash, tokenTypes.VERIFY_EMAIL);
 
@@ -84,6 +90,59 @@ export class MakeResetPasswordFactorie implements ControllerInterface {
       await sendResetPasswordEmail(email, resetPasswordToken);
 
       return successHelper(resetPasswordToken.length > 0 ? 'OK' : 'ERROR');
+    } catch (error) {
+      logger.error(error.message);
+      return serverErrorHelper(error);
+    }
+  }
+}
+
+export class MakeVerifyGoogleUserFactory implements ControllerInterface {
+  // eslint-disable-next-line no-unused-vars
+  constructor(
+    private readonly user: ValidateGoogleUserInterface,
+    private readonly handleToken: handleTokensInterface,
+    private readonly userService: typeof UserService
+  ) {
+    this.user = user;
+    this.handleToken = handleToken;
+  }
+
+  async handle(httpRequest: HttpRequest): Promise<HttpResponse> {
+    try {
+      const option = 'login';
+      const { token } = httpRequest.body;
+      const ticket = await this.user.validate({
+        idToken: token,
+        audience: environmentConfig().googleConfig.GOOGLE_CLIENT_ID,
+      });
+
+      const {
+        payload: { name, email, picture },
+      } = ticket;
+
+      const userDB: UserModel = await this.userService.getByEmail(email);
+
+      if (!userDB || isNil(userDB) || userDB?.isGoogle === false || userDB?.isActive === false) {
+        return badRequestHelper(new Error('User not found'), ReasonPhrases.UNAUTHORIZED, StatusCodes.UNAUTHORIZED);
+      }
+
+      // Se deben enviar los tokens de acceso y refresh generados, el refresh se almacena
+      // y se valida su fingerprint para que corresponda con el refresh y devuelva un token de acceso
+      try {
+        const tokenTupla = await this.handleToken.handleTokens(userDB, httpRequest.fingerprint.hash, option, false);
+        return successHelper({
+          tokenTupla,
+          user: {
+            name,
+            email,
+            picture,
+          },
+        });
+      } catch (error) {
+        logger.error(error);
+        return badRequestHelper(error.message, ReasonPhrases.UNAUTHORIZED, StatusCodes.UNAUTHORIZED);
+      }
     } catch (error) {
       logger.error(error.message);
       return serverErrorHelper(error);

@@ -1,6 +1,7 @@
 import fs from 'fs';
 import https from 'https';
 import express from 'express';
+import { OAuth2Client } from 'google-auth-library';
 
 import routes from './config.routes';
 import { logger } from './logger.config';
@@ -13,6 +14,7 @@ import { serverErrorHelper } from '../../helpers/http.helper';
 class App {
   public app: any = null;
   private server: any = null;
+  private client: any = null;
 
   constructor() {
     this.config();
@@ -20,6 +22,7 @@ class App {
 
   private config(): void {
     this.app = express();
+    this.client = new OAuth2Client(environmentConfig().googleConfig.GOOGLE_CLIENT_ID);
 
     configMiddlewares(this.app);
 

@@ -42,7 +42,15 @@ const userSchema = new Schema(
     },
     password: {
       type: String,
-      required: [true, 'Password is mandatory'],
+      validate: {
+        validator: function (password: string) {
+          if (this.isGoogle) {
+            return true;
+          }
+          return !this.isGoogle && password.length > 0;
+        },
+        message: () => 'Password is mandatory',
+      },
     },
     image: {
       type: String,
@@ -55,6 +63,10 @@ const userSchema = new Schema(
       enum: rolesTypes,
     },
     isActive: {
+      type: Boolean,
+      default: false,
+    },
+    isGoogle: {
       type: Boolean,
       default: false,
     },

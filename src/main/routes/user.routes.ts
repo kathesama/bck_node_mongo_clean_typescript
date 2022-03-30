@@ -14,6 +14,7 @@ import {
   makeRegisterUserFactorie,
   RunRequestResetPasswordFactorie,
   MakeRequestResetPasswordFactorie,
+  MakeValidateGoogleUserFactory,
 } from '../factories/user.factorie';
 
 const router: Router = Router();
@@ -40,6 +41,8 @@ router
   )
   .patch([authorize(tokenTypes.ACCESS, 'ADMIN_ROLE'), validateRequestParams(userValidation.updateUser)], AdapterRoute(makeUpdateUserFactorie()))
   .delete([authorize(tokenTypes.ACCESS, 'ADMIN_ROLE'), validateRequestParams(userValidation.deleteUser)], AdapterRoute(makeDeleteUserFactorie()));
+
+router.route('/google-login/').post([validateRequestParams(userValidation.loginUserGoogle)], AdapterRoute(MakeValidateGoogleUserFactory()));
 
 router
   .route('/')
