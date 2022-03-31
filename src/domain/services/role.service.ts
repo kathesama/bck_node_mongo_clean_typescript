@@ -8,7 +8,7 @@ class RoleService {
     return all;
   }
 
-  async getById(id: string): Promise<any> {
+  async getById(id: any): Promise<any> {
     const query = {
       $and: [{ _id: id }, { isActive: true }],
     };

@@ -37,6 +37,12 @@ export class HandleRoleUseCaseDB
     return new Promise((resolve) => resolve(roleDB));
   }
 
+  async getOneById(role: any): Promise<IRoleModelInterface> {
+    const roleDB: any = await this.roleService.getById(role);
+
+    return new Promise((resolve) => resolve(roleDB));
+  }
+
   async add(role: RoleModel): Promise<IRoleModelInterface> {
     const roleDB: any = await this.roleService.add(role);
 
