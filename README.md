@@ -202,3 +202,8 @@ Only for connections with **atlas** you must enable *IS_TLS_MONGO=true*, with on
 #### Restore database:
 > mongorestore  --authenticationDatabase admin -d cleanCode -u root -p pass12345
 
+# IMPORTANT:
+This project uses httponly cookie for refresh token security, for test that use this command:
+> chrome.exe --user-data-dir="C://Chrome dev session" --disable-web-security
+
+This is because chrome don't allow cookies on localhost by default.
