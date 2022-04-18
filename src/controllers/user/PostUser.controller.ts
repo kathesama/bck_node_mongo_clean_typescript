@@ -1,7 +1,7 @@
 import { StatusCodes, ReasonPhrases } from 'http-status-codes';
 
 import { ControllerInterface } from '../../interfaces/controller.interface';
-import { badRequestHelper, serverErrorHelper, successHelper } from '../../helpers/http.helper';
+import { badRequestHelper, serverErrorHelper, successHelper, successHelperWithCookie } from '../../helpers/http.helper';
 import { HttpRequest, HttpResponse } from '../../interfaces/http.interface';
 
 import { AddUserInterface, GetOneUserByEmailInterface } from '../../interfaces/useCaseDTO/User.interfaces';
@@ -10,13 +10,13 @@ import { Cryptography } from '../../interfaces/encryptor.interface';
 import { UserModel } from '../../domain/models/User.model';
 import { sendResetPasswordEmail, sendVerificationEmail } from '../../helpers/email.helper';
 import { handleTokensInterface, handleVerifyEmailTokensInterface } from '../../interfaces/useCaseDTO/Token.interfaces';
-import { GetOneRoleByNameInterface, GetOneRoleInterface } from '../../interfaces/useCaseDTO/Role.interfaces';
+import { GetOneRoleByNameInterface } from '../../interfaces/useCaseDTO/Role.interfaces';
 import { GenericError } from '../../interfaces/http/errors';
 import { tokenTypes } from '../../domain/enums/token.enum';
 import { ValidateGoogleUserInterface } from '../../interfaces/useCaseDTO/Google.interfaces';
-import { upsert } from '../../main/utils/utilFunctions';
-import UserService from '../../domain/services/user.service';
 import { isNil } from 'lodash';
+import UserService from '../../domain/services/user.service';
+import { Cookie } from 'nodemailer/lib/fetch/cookies';
 
 export class RegisterUserFactorie implements ControllerInterface {
   // tokenService = TokenService;
@@ -131,14 +131,46 @@ export class MakeVerifyGoogleUserFactory implements ControllerInterface {
       // y se valida su fingerprint para que corresponda con el refresh y devuelva un token de acceso
       try {
         const tokenTupla = await this.handleToken.handleTokens(userDB, httpRequest.fingerprint.hash, option, false);
-        return successHelper({
-          tokenTupla,
-          user: {
-            name,
-            email,
-            picture,
+
+        const { access, refresh } = tokenTupla;
+        const expires = Number.parseInt(environmentConfig().jwtConfig.accessExpirationMinutes, 10) || 0;
+        const options = {
+          created: new Date(Date.now()),
+          expire: new Date(Date.now() + expires * 60 * 1000),
+          maxAge: new Date(Date.now() + expires * 60 * 1000),
+          httpOnly: true,
+          sameSite: 'lax',
+          secure: false,
+        };
+
+        const cookie: Cookie = environmentConfig().serverConfig.IS_COOKIE_HTTPONLY_BASED
+          ? {
+              name: 'session',
+              value: refresh['token'],
+              ...options,
+            }
+          : undefined;
+
+        return successHelperWithCookie(
+          {
+            access: {
+              token: access['token'],
+              expires: access['expires'],
+            },
+            refresh: environmentConfig().serverConfig.IS_COOKIE_HTTPONLY_BASED
+              ? {}
+              : {
+                  token: refresh['token'],
+                  expires: refresh['expires'],
+                },
+            user: {
+              name,
+              email,
+              picture,
+            },
           },
-        });
+          cookie
+        );
       } catch (error) {
         logger.error(error);
         return badRequestHelper(error.message, ReasonPhrases.UNAUTHORIZED, StatusCodes.UNAUTHORIZED);

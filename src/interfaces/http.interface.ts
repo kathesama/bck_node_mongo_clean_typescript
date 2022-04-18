@@ -1,8 +1,10 @@
 import { StatusCodes } from 'http-status-codes';
+import { Cookie } from 'nodemailer/lib/fetch/cookies';
 
 export interface HttpResponse {
   statusCode: StatusCodes;
   body: any;
+  cookie?: Cookie;
 }
 
 export interface HttpRequest {
@@ -14,4 +16,5 @@ export interface HttpRequest {
   customVars?: any;
   language?: any;
   user?: any;
+  cookies?: any;
 }

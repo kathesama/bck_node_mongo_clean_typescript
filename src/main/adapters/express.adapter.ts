@@ -1,7 +1,9 @@
 import { Request, Response } from 'express';
+import cookie from 'cookie';
 
 import { HttpRequest, HttpResponse } from '../../interfaces/http.interface';
 import { ControllerInterface } from '../../interfaces/controller.interface';
+import { environmentConfig } from '../config';
 
 // desacoplamos express del proyecto para usarlo en los routes
 export const AdapterRoute = (controller: ControllerInterface) => {
@@ -15,10 +17,19 @@ export const AdapterRoute = (controller: ControllerInterface) => {
       fingerprint: req.fingerprint,
       language: req.language,
       user: req.user,
+      cookies: cookie.parse(req.headers.cookie || ''),
     };
 
     const httpResponse: HttpResponse = await controller.handle(httpRequest);
 
-    res.status(httpResponse.statusCode).json(httpResponse.body);
+    if (httpResponse?.cookie && environmentConfig().serverConfig.IS_COOKIE_HTTPONLY_BASED) {
+      const {
+        cookie: { name = 'cookie_name', value = 'cookie_value', ...options },
+      } = httpResponse;
+
+      res.status(httpResponse.statusCode).cookie(name, value, options).json(httpResponse.body);
+    } else {
+      res.status(httpResponse.statusCode).json(httpResponse.body);
+    }
   };
 };

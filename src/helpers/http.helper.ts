@@ -4,6 +4,8 @@ import { isNil, isNaN, isEmpty } from 'lodash';
 import { languageTypes } from '../domain/enums/language.enum';
 import { HttpRequest, HttpResponse } from '../interfaces/http.interface';
 import { GenericError } from '../interfaces/http/errors/GenericError';
+import { Cookie } from 'nodemailer/lib/fetch/cookies';
+import { environmentConfig } from '../main/config';
 
 export const serverErrorHelper = (error: Error): HttpResponse => {
   const name = 'Internal Server Error';
@@ -46,22 +48,34 @@ export const successHelper = (data: any): HttpResponse => ({
   body: data,
 });
 
+export const successHelperWithCookie = (data: any, cookie?: Cookie): HttpResponse => ({
+  statusCode: 200,
+  body: data,
+  cookie,
+});
+
 /**
  * Returns token from Authorization header
  */
 export const checkAutorizationHeader = (httpRequest: HttpRequest): any => {
   try {
-    // console.log(req.header('Authorization'));
-
-    if (isNil(httpRequest.headers['authorization']) || isNaN(httpRequest.headers['authorization']) || isEmpty(httpRequest.headers['authorization'])) {
-      throw new GenericError('Autorization token is required', StatusCodes.UNAUTHORIZED, ReasonPhrases.UNAUTHORIZED);
+    let token = '';
+    if (environmentConfig().serverConfig.IS_COOKIE_HTTPONLY_BASED) {
+      token = `Bearer ${httpRequest.cookies['session']}`;
+    } else {
+      token = httpRequest.headers.authorization;
     }
 
-    if (!httpRequest.headers['authorization'].startsWith('Bearer')) {
+    // if (isNil(httpRequest.headers['authorization']) || isNaN(httpRequest.headers['authorization']) || isEmpty(httpRequest.headers['authorization'])) {
+    if (isNil(token) || isEmpty(token)) {
+      throw new GenericError('Authorization token is required', StatusCodes.UNAUTHORIZED, ReasonPhrases.UNAUTHORIZED);
+    }
+
+    if (!token.startsWith('Bearer')) {
       throw new GenericError('Token is invalid', StatusCodes.UNAUTHORIZED, ReasonPhrases.UNAUTHORIZED);
     }
 
-    return httpRequest.headers['authorization'].slice(7, httpRequest.headers['authorization'].length);
+    return token.slice(7, token.length);
   } catch (error) {
     return badRequestHelper(error, error.name, error.statusCode);
   }

@@ -41,6 +41,9 @@ export const environmentConfig = (): any => {
       HOST_ENABLED: Joi.string().description('Whitelisted hosts'),
       HOST_TIME_WINDOWD: Joi.string().description('Time enabled for make a certain petitions quantity'),
       HOST_MAX_PETITIONS: Joi.string().description('Max quantity petitions for a window time'),
+      EXPIRE_TOKEN_REFRESH: Joi.string().description('Max quantity petitions for a window time'),
+      EXPIRE_TOKEN_ACCESS: Joi.string().description('Max quantity petitions for a window time'),
+      IS_COOKIE_HTTPONLY_BASED: Joi.boolean().default(false).description('Indicates if refresh token should be stored in a cookie'),
     })
     .unknown();
 
@@ -64,6 +67,7 @@ export const environmentConfig = (): any => {
     HOST_ENABLED: envVars.HOST_ENABLED,
     HOST_TIME_WINDOWD: envVars.HOST_TIME_WINDOWD,
     HOST_MAX_PETITIONS: envVars.HOST_MAX_PETITIONS,
+    IS_COOKIE_HTTPONLY_BASED: envVars.IS_COOKIE_HTTPONLY_BASED || false,
   };
 
   const emailConfig = {

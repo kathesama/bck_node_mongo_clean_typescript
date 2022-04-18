@@ -10,6 +10,8 @@ export interface ITokenModelInterface {
   type: string;
   expires: Date;
   blacklisted: boolean;
+  access?: string;
+  refresh?: string;
 }
 
 export interface GetTokenInterface {

@@ -126,7 +126,7 @@ const loginUserGoogle = {
     'accept-language': Joi.required().custom(acceptedLanguage),
   }),
   body: Joi.object().keys({
-    token: Joi.string().required(),
+    token: Joi.string(),
   }),
   options: {
     cache: false,
