@@ -1,6 +1,5 @@
 {
   "src/**/*.{js,jsx,ts,tsx,json,css,scss,md}": [
-    "npm run lint:fix",
-    "npm run prettier:fix"
+    "eslint 'src/**' --fix"
   ]
 }
