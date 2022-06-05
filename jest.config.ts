@@ -36,6 +36,6 @@ export default {
   extensionsToTreatAsEsm: ['.ts', '.tsx'],
   transform: {
     '.+\\.ts$': 'ts-jest',
-    "^.+\\.js$": "babel-jest"
+    '^.+\\.js$': 'babel-jest',
   },
 };

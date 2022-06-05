@@ -23,12 +23,13 @@
     "lint:fix": "eslint . --fix",
     "prettier": "prettier --check **/*.ts",
     "prettier:fix": "prettier --write **/*.ts",
-    "prepare": "husky install",
     "predev": "npm run swagger",
     "dev": "concurrently \"nodemon\" \"nodemon -x tsoa spec\"",
     "swagger": "tsoa spec",
     "jest:clear": "jest --clearCache",
-    "copy-files": "copy \"./.env\" \"./dist/.env\""
+    "copy-files": "copy \"./.env\" \"./dist/.env\"",
+    "pre-commit-lint": "npm run lint:fix && npm run prettier:fix",
+    "prepare": "husky install"
   },
   "engines": {
     "node": ">=15.11.0"
@@ -87,9 +88,9 @@
     "eslint-plugin-promise": "^5.1.0",
     "eslint-plugin-standard": "^5.0.0",
     "git-commit-msg-linter": "^3.2.6",
-    "husky": "^6.0.0",
+    "husky": "^8.0.1",
     "jest": "^27.0.4",
-    "lint-staged": "^11.0.0",
+    "lint-staged": "^13.0.0",
     "nodemon": "^2.0.7",
     "prettier": "^2.3.1",
     "ts-jest": "^27.0.4",
@@ -119,6 +120,7 @@
     "joi": "^17.4.0",
     "jsonwebtoken": "^8.5.1",
     "lodash": "^4.17.21",
+    "micromatch": "^4.0.5",
     "moment": "^2.29.2",
     "moment-timezone": "^0.5.33",
     "mongoose": "^5.12.14",

@@ -42,7 +42,7 @@ export const mergeObjects = (previousObj: any, actualObj: any) => {
 /**
  * Update data for google login
  * */
-export const upsert = (array, item) => {
+export const upsert = (array: any, item: any): any => {
   const i = array.findIndex((_item) => _item.email === item.email);
   if (i > -1) array[i] = item;
   else array.push(item);
