@@ -20,6 +20,7 @@
     "test:coverage": "cross-env NODE_ENV=test npm test -- --coverage",
     "test:clear": "jest --clearCache",
     "lint": "eslint src/**/*.ts",
+    "lint:cache": "eslint src/**/*.ts --cache",
     "lint:fix": "eslint . --fix",
     "prettier": "prettier --check **/*.ts",
     "prettier:fix": "prettier --write **/*.ts",
