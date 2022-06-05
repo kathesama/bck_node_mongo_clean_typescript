@@ -207,3 +207,4 @@ This project uses httponly cookie for refresh token security, for test it use th
 > chrome.exe --user-data-dir="C://Chrome dev session" --disable-web-security
 
 This is because chrome don't allow cookies on localhost by default.
+
