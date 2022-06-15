@@ -9,13 +9,11 @@ const createUser = {
   }),
   body: Joi.object().keys({
     email: Joi.string().required().email(),
-    password: Joi
-      .string()
-      .when('isGoogle', {
-        is: true,
-        then: Joi.optional().allow(''),
-        otherwise: Joi.required().custom(password),
-      }),
+    password: Joi.string().when('isGoogle', {
+      is: true,
+      then: Joi.optional().allow(''),
+      otherwise: Joi.required().custom(password),
+    }),
     firstName: Joi.string().alphanum().optional(),
     lastName: Joi.string().alphanum().optional(),
     isGoogle: Joi.boolean().optional(),
@@ -178,10 +176,9 @@ const requestResetUserPassword = {
   headers: Joi.object().keys({
     'accept-language': Joi.required().custom(acceptedLanguage),
   }),
-  body: Joi.object()
-    .keys({
-      email: Joi.string().required().email(),
-    }),
+  body: Joi.object().keys({
+    email: Joi.string().required().email(),
+  }),
   options: {
     cache: false,
     allowUnknown: true,
@@ -195,10 +192,9 @@ const runResetUserPassword = {
   params: Joi.object().keys({
     key: Joi.string().required(),
   }),
-  body: Joi.object()
-    .keys({
-      password: Joi.string().custom(password).optional(),
-    }),
+  body: Joi.object().keys({
+    password: Joi.string().custom(password).optional(),
+  }),
   options: {
     cache: false,
     allowUnknown: true,

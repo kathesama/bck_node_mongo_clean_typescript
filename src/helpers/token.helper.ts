@@ -42,14 +42,7 @@ const getTypedToken = (uuid: string, expires: any, type: any, secret = environme
  */
 const saveToken = async (token: string, userId: string, fingerprint: string, expires: any, type: string, blacklisted = false) => {
   try {
-    const tokenObj = new TokenModel(
-      token,
-      fingerprint,
-      userId,
-      type,
-      expires,
-      blacklisted
-    );
+    const tokenObj = new TokenModel(token, fingerprint, userId, type, expires, blacklisted);
 
     const tokenDoc = await TokenService.create(tokenObj);
 
@@ -110,24 +103,24 @@ const checkAllValidTokens = async (max: number, query: any, message: string, res
   return resultObj;
 };
 
-const  generateNewTokenByType = async (user: string, fingerprint: string, tokenType: string): Promise<any> => {
+const generateNewTokenByType = async (user: string, fingerprint: string, tokenType: string): Promise<any> => {
   let newTokenExpires: any;
-  let convert= true;
+  let convert = true;
 
   switch (tokenType) {
     case tokenTypes.REFRESH:
-        newTokenExpires = moment().add(environmentConfig().jwtConfig.refreshExpirationDays, 'days');
+      newTokenExpires = moment().add(environmentConfig().jwtConfig.refreshExpirationDays, 'days');
       break;
     case tokenTypes.ACCESS:
-        newTokenExpires = moment().add(environmentConfig().jwtConfig.accessExpirationMinutes, 'minutes');
+      newTokenExpires = moment().add(environmentConfig().jwtConfig.accessExpirationMinutes, 'minutes');
       break;
     case tokenTypes.RESET_PASSWORD:
-        newTokenExpires = moment().add(environmentConfig().jwtConfig.resetPasswordExpirationMinutes, 'minutes');
-        convert = false;
+      newTokenExpires = moment().add(environmentConfig().jwtConfig.resetPasswordExpirationMinutes, 'minutes');
+      convert = false;
       break;
     case tokenTypes.VERIFY_EMAIL:
-        newTokenExpires = moment().add(environmentConfig().jwtConfig.verifyEmailExpirationMinutes, 'minutes');
-        convert = false;
+      newTokenExpires = moment().add(environmentConfig().jwtConfig.verifyEmailExpirationMinutes, 'minutes');
+      convert = false;
       break;
   }
 
@@ -137,7 +130,7 @@ const  generateNewTokenByType = async (user: string, fingerprint: string, tokenT
 
   return {
     token: newToken,
-    expires: convert? newTokenExpires.utc(true).toDate() : newTokenExpires,
+    expires: convert ? newTokenExpires.utc(true).toDate() : newTokenExpires,
   };
 };
 
@@ -195,11 +188,11 @@ export const handleTokens = async (user: any, fingerprint: string, option: strin
         tokenArray['refresh'] = await getActualToken(user, fingerprint, tokenTypes.REFRESH);
       } else {
         // once we've chech the refresh tokens we've to create a new one
-        tokenArray['refresh'] = await  generateNewTokenByType(user, fingerprint, tokenTypes.REFRESH);
+        tokenArray['refresh'] = await generateNewTokenByType(user, fingerprint, tokenTypes.REFRESH);
       }
 
       // once we've check the access tokens we've to create a new one
-      tokenArray['access'] = await  generateNewTokenByType(user, fingerprint, tokenTypes.ACCESS);
+      tokenArray['access'] = await generateNewTokenByType(user, fingerprint, tokenTypes.ACCESS);
       break;
     case 'reauthenticate':
       // now we've to check that must not exists more than one A.T. with the same fingerprint
@@ -208,7 +201,7 @@ export const handleTokens = async (user: any, fingerprint: string, option: strin
       }
 
       // once we've check the access tokens we've to create a new one
-      tokenArray['access'] = await  generateNewTokenByType(user, fingerprint, tokenTypes.ACCESS);
+      tokenArray['access'] = await generateNewTokenByType(user, fingerprint, tokenTypes.ACCESS);
       break;
     case 'logout':
       // now we've to check that must not exists more than one A.T. with the same fingerprint
@@ -233,17 +226,15 @@ export const generateMailedToken = async (user: any, fingerprint: string, type: 
   try {
     const tokenArray = await generateNewTokenByType(user, fingerprint, type);
 
-  // const expires = moment().add(environmentConfig().jwtConfig.verifyEmailExpirationMinutes, 'minutes');
-  // const verifyEmailToken = getTypedToken(user, expires, tokenTypes.VERIFY_EMAIL);
-  // await saveToken(tokenArray['token'], user, fingerprint, tokenArray['expires'], type);
+    // const expires = moment().add(environmentConfig().jwtConfig.verifyEmailExpirationMinutes, 'minutes');
+    // const verifyEmailToken = getTypedToken(user, expires, tokenTypes.VERIFY_EMAIL);
+    // await saveToken(tokenArray['token'], user, fingerprint, tokenArray['expires'], type);
 
-  return tokenArray['token'];
+    return tokenArray['token'];
   } catch (error) {
     throw new GenericError(error.message, StatusCodes.INTERNAL_SERVER_ERROR, ReasonPhrases.INTERNAL_SERVER_ERROR);
   }
 };
-
-
 
 /**
  * Verify token and return token doc (or throw an error if it is not valid)

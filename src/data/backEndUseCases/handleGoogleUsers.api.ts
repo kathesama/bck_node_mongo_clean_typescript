@@ -1,4 +1,3 @@
-import { GoogleModel } from '../../domain/models/Google.model';
 import GoogleService from '../../domain/services/google.service';
 import { IGoogleModelInterface, ValidateGoogleUserInterface } from '../../interfaces/useCaseDTO/Google.interfaces';
 

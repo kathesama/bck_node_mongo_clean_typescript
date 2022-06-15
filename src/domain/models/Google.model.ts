@@ -26,6 +26,24 @@ export class GoogleModel implements IGoogleModelInterface {
     token_type: string;
   };
   wc: string;
+  envelope: { alg: string; kid: string; typ: string };
+  payload: {
+    iss: string;
+    azp: string;
+    aud: string;
+    sub: string;
+    email: string;
+    email_verified: true;
+    at_hash: string;
+    name: string;
+    picture: string;
+    given_name: string;
+    family_name: string;
+    locale: string;
+    iat: number;
+    exp: string;
+    jti: string;
+  };
 
   constructor(data: IGoogleModelInterface) {
     this.Ba = data.Ba || '';
